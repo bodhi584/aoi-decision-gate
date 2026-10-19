@@ -91,14 +91,14 @@ Planner Copilot is the layer between the AI model and the simulation model. The 
 ```
  planner's question
         │
- ┌──────▼───────────────────────────────────────────────────────────────┐
- │ 3. Workflow     the AI may only choose a tool and fill in parameters; │
- │                 a rejected call goes back once more, then refusal     │
- │ 2. Check engine the same code for every case: scope → units →         │
- │                 validated range → replications → paired comparison    │
- │ 1. Case cards   one per case: what the model can answer and which     │
+ ┌──────▼─────────────────────────────────────────────────────────────────┐
+ │ 3. Workflow     the AI may only choose a tool and fill in parameters;  │
+ │                 a rejected call goes back once more, then refusal      │
+ │ 2. Check engine the same code for every case: scope → units →          │
+ │                 validated range → replications → paired comparison     │
+ │ 1. Case cards   one per case: what the model can answer and which      │
  │                 inputs are valid                                       │
- └──────┬───────────────────────────────────────────────────────────────┘
+ └──────┬─────────────────────────────────────────────────────────────────┘
         │  only the check engine starts the simulation; the AI never does
  published simulation model  →  answer with confidence interval, warning or refusal
 ```
