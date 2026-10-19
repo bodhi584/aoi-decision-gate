@@ -36,7 +36,7 @@ We use **published simulation cases with known expert results** from about four 
 | Folder | Content | Status |
 |---|---|---|
 | [`docs/`](docs/) | Proposal, presentations, final report | proposal and P1 slides ✅ |
-| [`cases/`](cases/) | One folder per published case: model setup, reproduction of the expert results | Case 1 and Case 2 chosen, first reproductions done |
+| [`cases/`](cases/) | One folder per published case: model setup, reproduction of the expert results | Cases 1–2: first reproductions done · Cases 3–4: candidates named |
 | `lit/` | Literature review | due P2 (3 Nov) |
 | `engine/` | Code checks around the language model | from P3 (24 Nov) |
 | `agent/` | Assistant workflow and model selection | from P3 (24 Nov) |

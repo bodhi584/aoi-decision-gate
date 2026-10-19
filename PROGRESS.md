@@ -7,7 +7,7 @@ Last update: 20 Oct 2026
 | Milestone | Date | Deliverables | Status |
 |---|---|---|---|
 | **P1** | 20 Oct | Proposal, team, GitHub repository | ✅ done |
-| **P2** | 3 Nov | Literature review, all four cases chosen | 🔄 in progress |
+| **P2** | 3 Nov | Literature review, all four cases confirmed | 🔄 in progress |
 | **P3** | 24 Nov | Cases rebuilt, test questions, first version of the assistant | ⏳ planned |
 | **P4** | 8 Dec | First experiments | ⏳ planned |
 | **P5** | 22 Dec | Full evaluation, report draft | ⏳ planned |
@@ -23,7 +23,7 @@ gantt
     Proposal, team, repository           :done,   p1, 2026-10-06, 2026-10-20
     section P2
     Literature review                    :active, l1, 2026-10-14, 2026-11-03
-    Choose cases 3 and 4                 :active, c1, 2026-10-14, 2026-11-03
+    Confirm cases 3 and 4                :active, c1, 2026-10-14, 2026-11-03
     section P3
     Rebuild cases, test questions        :        c2, 2026-10-14, 2026-11-24
     Code checks and assistant v1         :        s1, 2026-11-03, 2026-11-24
@@ -44,13 +44,14 @@ Tasks and owners are tracked as [issues](../../issues), grouped by [milestone](.
 |---|---|---|---|---|
 | 1 | Semiconductor fab (large company) | SMT2020 testbed (Kopp et al. 2020); expert results from Tassel et al. 2023 | Melisa Subasi | chosen · first reproduction: 28 of 28 published values within tolerance |
 | 2 | Sheet-metal job shop (SME) | JaamSim model and 30-replication results, Jurczyk-Bunkowska 2026 (Zenodo) | Yu Han | chosen · reproduction identical to the published replications |
-| 3 | New industry | to be chosen | Meron Hagos | searching |
-| 4 | New industry (test case) | to be chosen | Alejandro Rivas | searching |
+| 3 | Pallet warehouse with reach trucks (logistics) | Saengphueng 2026 (Zenodo) | Meron Hagos | candidate · first check: 360 of 360 published values reproduced |
+| 4 | Press line, manual vs robotic (held-out test) | Gołda, Kampa and Paprocka 2016 (FedCSIS) | Alejandro Rivas | candidate · to be confirmed |
 
 Case 4 is the held-out test case: its test questions are written separately and kept out of this repository until the final evaluation.
 
 ## Log
 
 - **20 Oct 2026** · Proposal submitted (P1). Repository published.
+- **16 Oct 2026** · Candidates for Cases 3 and 4 found (warehouse, press line); Case 3 first check: the published 60 scenarios × 6 KPIs reproduced exactly.
 - **16–17 Oct 2026** · Case 1: open-source SMT2020 simulator set up; four published scenarios (HVLM / LVHM × FIFO / critical ratio) run with 6 seeds each; all 28 values of Tassel et al. (2023, Table 1) within tolerance. See [`cases/A1_smt2020/`](cases/A1_smt2020/).
 - **14 Oct 2026** · Case 2: published JaamSim model run headless; 30 replications identical to the authors' published results (overtime 3.31 h normal week, 11.54 h with 20 % more orders). See [`cases/A2_sme/`](cases/A2_sme/).
