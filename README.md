@@ -7,7 +7,7 @@ Yu Han · Melisa Subasi · Meron Hagos · Alejandro Rivas
 
 📄 Proposal slides: [`docs/P1_proposal_presentation.pdf`](docs/P1_proposal_presentation.pdf) · one-page proposal: [`docs/proposal.md`](docs/proposal.md) · progress: [`PROGRESS.md`](PROGRESS.md)
 
-This page is our proposal in long form. Every section answers **what** we do and **why**. Terms are explained in the [glossary](#glossary); sources are listed under [references](#references).
+This page is our proposal in long form. Every section answers **what** we do and **why**. Each reason is backed by a source (paper and page), by our own results (linked file), or is marked as **our own setting** with the reasoning behind it. Terms are explained in the [glossary](#glossary); sources are listed under [references](#references).
 
 ---
 
@@ -52,11 +52,13 @@ This page is our proposal in long form. Every section answers **what** we do and
 
 > **Why these three measures?** They cover the three things that can happen to a planner: a useful answer, a dangerous answer, or an honest "I can't answer that". Accuracy alone would hide the dangerous answers.
 >
-> **Why is "confidently wrong" the most important?** A plant manager acts on a confident number, for example by hiring or cancelling overtime. A cautious answer costs time; a confidently wrong one costs money. So its limit is the strictest (≤ 2 %).
+> **Why is "confidently wrong" the most important?** A plant manager acts on a confident number, for example by hiring or cancelling overtime. A cautious answer costs time; a confidently wrong one costs money. Simulation validation treats the same error the same way: accepting an invalid model as valid is the *model user's risk*, which "must be kept small" (Sargent, Goldsman and Yaacoub 2016, p. 171). A confidently wrong answer is that error at the level of a single question, so its limit is the strictest (≤ 2 %).
 >
 > **What does "close to the expert" mean?** Within the wider of ±5 % or ±2 standard deviations of the published result. Comparable studies accept 5–10 % deviation from the reference model (Schmitt et al. 2026, p. 648), and simulation validation requires the accepted accuracy to be fixed before testing (Sargent 2015, p. 1730). We fix ours now, before any experiment.
 >
-> **Why 90 % and not 100 %?** Some published values rest on very few events (for example a handful of rush orders per run); their spread is wide even for the expert. 90 % is ambitious but reachable; the final numbers will show how close we get.
+> **Why should the AI refuse at all?** A language model tends to answer every question, even when it should not. The research literature on this problem states that models should "ideally abstain", i.e. refuse, when they cannot answer reliably (Wen et al. 2025, p. 529). A simulation model can answer only what it models (e.g. it has no costs in euros), so refusing those questions is part of a correct answer.
+>
+> **Why 90 % and 2 %, and not other numbers?** These values are **our own setting**; we found no published benchmark for this task to copy them from. We fixed them before any experiment, as validation practice requires (Sargent 2015, p. 1730), so they cannot be adjusted to fit our results. 100 % is not realistic: some published values rest on very few events (for example a handful of rush orders per run), so their spread is wide even for the expert. Whether 90 % is reached is part of the result.
 
 ## 4. Our idea
 **An AI assistant that runs the simulation, and checks itself.**
@@ -73,7 +75,7 @@ The answer always comes from the simulation, never from the AI itself, and it sh
 >
 > **Why "answer with uncertainty"?** Because one run is not an answer (see section 1). The planner sees a range, for example "3.7 h overtime (3.4–4.0 h, 30 runs)", and can judge the risk.
 >
-> **Why a local AI?** Many companies may not send production data to a cloud AI service. A model that runs on the company's own computer keeps the data in-house. It also makes our results repeatable: the same model version gives the same behaviour.
+> **Why a local AI?** Data protection is the most named obstacle for companies that already use AI in Germany: in a 2026 survey of 603 German companies (20+ employees), 66 % of AI users named data-protection requirements and 45 % the worry that company data could "fall into the wrong hands" (Bitkom 2026). A model that runs on the company's own computer keeps production data in-house. It also makes our results repeatable: the same model version gives the same behaviour.
 
 ## 5. Technology stack
 
@@ -95,7 +97,7 @@ The answer always comes from the simulation, never from the AI itself, and it sh
 3. **Build the assistant**: a local AI assistant with code checks, built with open-source tools.
 4. **Compare**: three setups: expert, AI + simulation, and AI + Planner Copilot + simulation.
 
-> **Why about 4 cases from different industries?** One case could be solved by tuning to it. Several industries (semiconductors, metalworking, warehousing, metal forming) show whether the approach carries over, while staying feasible for a team of four in one semester.
+> **Why about 4 cases from different industries?** One case could be solved by tuning to it. Several industries (semiconductors, metalworking, warehousing, metal forming) show whether the approach carries over. The number 4 is **our feasibility choice**: each case needs a reproduction, a case description and about 20 test questions, which is about one case per team member in one semester.
 >
 > **Why rebuild (reproduce) each case first?** If our run of the model does not match the published results, any later difference could be our mistake rather than the AI's. Reproduction comes first; only then is a case used for testing.
 >
@@ -201,6 +203,9 @@ A case is one published factory simulation model with known expert results. Deta
 - Sargent, R. G. (2015). An introductory tutorial on verification and validation of simulation models. *Proc. Winter Simulation Conference*, 1729–1740.
 - Schmitt, T. et al. (2026). LLM-driven discrete-event simulation: a generative AI framework for automated model generation, adaptation, and evaluation in manufacturing. *Journal of Manufacturing Systems* 85, 642–661.
 - Shinn, N. et al. (2023). Reflexion: language agents with verbal reinforcement learning. *Advances in Neural Information Processing Systems 36*.
+- Sargent, R. G., Goldsman, D. M. and Yaacoub, T. (2016). A tutorial on the operational validation of simulation models. *Proc. Winter Simulation Conference*, 163–177.
+- Wen, B. et al. (2025). Know your limits: a survey of abstention in large language models. *Transactions of the Association for Computational Linguistics* 13, 529–556.
+- Bitkom (2026). *Erstmals nutzt Mehrheit der Unternehmen KI* [press release, 14 Sep 2026; survey of 603 companies with 20+ employees]. https://www.bitkom.org/Presse/Presseinformation/Erstmals-nutzt-Mehrheit-Unternehmen-KI
 - Case sources: see [`cases/`](cases/).
 
 ---
