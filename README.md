@@ -7,7 +7,7 @@ Case Study *Intelligent Systems in Production* (MDM-M-2), Technische Hochschule 
 |---|---|
 | Team | Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas |
 | Status | **P1 – proposal** (20 Oct 2026). Milestone plan and log: [`PROGRESS.md`](PROGRESS.md) · tasks: [Issues](../../issues) · deadlines: [Milestones](../../milestones) |
-| Proposal | [`docs/proposal.md`](docs/proposal.md) |
+| Proposal | [`docs/proposal.md`](docs/proposal.md) · slides: [`docs/P1_proposal_presentation.pdf`](docs/P1_proposal_presentation.pdf) |
 
 ## The problem
 
@@ -35,7 +35,7 @@ We use **published simulation cases with known expert results** from about four 
 
 | Folder | Content | Status |
 |---|---|---|
-| [`docs/`](docs/) | Proposal, presentations, final report | proposal ✅ |
+| [`docs/`](docs/) | Proposal, presentations, final report | proposal and P1 slides ✅ |
 | [`cases/`](cases/) | One folder per published case: model setup, reproduction of the expert results | Case 1 and Case 2 chosen, first reproductions done |
 | `lit/` | Literature review | due P2 (3 Nov) |
 | `engine/` | Code checks around the language model | from P3 (24 Nov) |
