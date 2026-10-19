@@ -1,12 +1,12 @@
 # Planner Copilot
 
 **A local AI assistant for production planning simulations.**
-Case Study *Intelligent Systems in Production* (MDM-M-2), Deggendorf Institute of Technology, winter semester 2026/27 · Team 1
+Case Study *Intelligent Systems in Production* (MDM-M-2), Technische Hochschule Deggendorf (THD), winter semester 2026/27 · Team 1
 
 | | |
 |---|---|
 | Team | Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas |
-| Status | **P1 – proposal** (20 Oct 2026). See [`PROGRESS.md`](PROGRESS.md) for the milestone plan and what is done. |
+| Status | **P1 – proposal** (20 Oct 2026). Milestone plan and log: [`PROGRESS.md`](PROGRESS.md) · tasks: [Issues](../../issues) · deadlines: [Milestones](../../milestones) |
 | Proposal | [`docs/proposal.md`](docs/proposal.md) |
 
 ## The problem

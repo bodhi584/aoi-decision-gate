@@ -13,6 +13,31 @@ Last update: 20 Oct 2026
 | **P5** | 22 Dec | Full evaluation, report draft | ⏳ planned |
 | **Final** | 12 Jan | Final presentation, report, demo video | ⏳ planned |
 
+## Timeline
+
+```mermaid
+gantt
+    dateFormat YYYY-MM-DD
+    axisFormat %d %b
+    section P1
+    Proposal, team, repository           :done,   p1, 2026-10-06, 2026-10-20
+    section P2
+    Literature review                    :active, l1, 2026-10-14, 2026-11-03
+    Choose cases 3 and 4                 :active, c1, 2026-10-14, 2026-11-03
+    section P3
+    Rebuild cases, test questions        :        c2, 2026-10-14, 2026-11-24
+    Code checks and assistant v1         :        s1, 2026-11-03, 2026-11-24
+    User interface v1                    :        u1, 2026-11-03, 2026-11-24
+    section P4
+    First experiments                    :        e1, 2026-11-24, 2026-12-08
+    section P5
+    Full evaluation, report draft        :        e2, 2026-12-08, 2026-12-22
+    section Final
+    Presentation, report, demo video     :        f1, 2026-12-22, 2027-01-12
+```
+
+Tasks and owners are tracked as [issues](../../issues), grouped by [milestone](../../milestones).
+
 ## Cases
 
 | Case | Industry | Source | Owner | Status |
