@@ -58,7 +58,7 @@ This page is our proposal in long form. Every section answers **what** we do and
 >
 > **Why should the AI refuse at all?** A language model tends to answer every question, even when it should not. The research literature on this problem states that models should "ideally abstain", i.e. refuse, when they cannot answer reliably (Wen et al. 2025, p. 529). A simulation model can answer only what it models (e.g. it has no costs in euros), so refusing those questions is part of a correct answer.
 >
-> **Why 90 % and 2 %, and not 85 % or 95 %?** The values are **our own setting**, fixed before any experiment as validation practice requires (Sargent 2015, p. 1730), so they cannot be adjusted to fit our results. Four arguments set them:
+> **Why 90 % and 2 %, and not 85 % or 95 %?** The values are **our own setting**, fixed before the planned experiments (P4) as validation practice requires, informed by our first development runs (Sargent 2015, p. 1730), so they cannot be adjusted to fit our results. Four arguments set them:
 >
 > 1. **Comparable systems.** The two published systems closest to ours, where a language model drives a simulation with code-side checks, report 92.6 % correct values with a local 12-billion-parameter model (Mylonas et al. 2026, p. 4) and 388 of 400 correct runs (97 %) with 26–35-billion-parameter models (Monks et al. 2026, p. 21). Our models are smaller (7–9 billion), so a target slightly below theirs is ambitious but realistic. Both are preprints and measure similar, not identical things.
 > 2. **What our measurement can resolve.** With about 80 test questions, a result of 85 % has a 95 % confidence interval of about 76–91 %, 90 % about 82–95 %, and 95 % about 88–98 % (Wilson interval, our calculation). The intervals overlap, so 85, 90 and 95 cannot be told apart reliably. The target is a round value in the realistic range; we always report the confidence interval, never the point value alone.
@@ -70,7 +70,7 @@ This page is our proposal in long form. Every section answers **what** we do and
 ## 4. Our idea
 **An AI assistant that runs the simulation, and checks itself.**
 
-![Question in plain language → Local AI assistant → Code checks every step → Existing simulation model → Answer with uncertainty](docs/img/idea.png)
+![Question in plain language → Local AI assistant → Code checks every call → Existing simulation model → Answer with uncertainty](docs/img/idea.png)
 
 The answer always comes from the simulation, never from the AI itself, and it shows how certain the result is.
 
@@ -90,7 +90,7 @@ Planner Copilot is the layer between the AI model and the simulation model. The 
 
 ![How Planner Copilot answers: workflow, check engine and case card between the AI model and the simulation](docs/img/core.png)
 
-*Blue: the parts we build. Grey: existing parts that can be replaced. The three answers at the bottom are real outputs of our first version (Case 2, 17 Oct 2026). A tool call the check engine rejects goes back to the AI once more; if it is rejected again, the answer is a refusal. Only the check engine starts the simulation; the AI never does.*
+*Blue: the parts we build. Grey: existing parts that can be replaced. The three answers at the bottom are real outputs of our first version (Case 2, 17 Oct 2026). A tool call the check engine rejects goes back to the AI with a hint; the AI may correct it, up to 6 tool calls in total, after which the answer is a refusal. A question outside the model is refused directly. Only the check engine starts the simulation; the AI never does.*
 
 | Part | Who makes it | Can it be replaced? |
 |---|---|---|
@@ -103,7 +103,7 @@ Planner Copilot is the layer between the AI model and the simulation model. The 
 >
 > **How is this classified?** It follows the principle "the AI proposes, external code verifies" (LLM-Modulo; Kambhampati et al. 2024). The check engine is a knowledge-based system (an expert system in the classic sense); combined with the language model it forms a neuro-symbolic system, in which the neural part understands language and the symbolic part guarantees correct operation of the model.
 >
-> **Why is it new?** In the work we reviewed, checks on AI-operated simulation are done by humans or by another AI, or check only the format of a request; validity ranges, replications and confidence intervals are used only in the authors' own offline validation (Schmitt et al. 2026, pp. 646, 648). We found no system that enforces these simulation rules as code on every call of a small local AI model. Details: literature report (P2).
+> **Why is it new?** In the work we reviewed, checks on AI-operated simulation are mostly done by humans or by another AI (Schmitt et al. 2026, pp. 646, 648). The closest system (Mylonas et al. 2026) enforces admissible parameter ranges in code, but has no replications, confidence intervals or refusals. We found no system that enforces all of these simulation rules as code on every simulation call of a small local AI model. Details: literature report (P2).
 
 ### 5.1 Case card: the expert's knowledge, one per case
 Example from Case 2 (sheet-metal job shop):
@@ -111,7 +111,7 @@ Example from Case 2 (sheet-metal job shop):
 | Entry | Example |
 |---|---|
 | Parameters and defaults | workers, default 3 |
-| **Validated range** | workers 3–4; shift length only 480 min validated |
+| **Validated range** | workers 3–4 (3 = published scenario; 4 = our own run of the published model, accepted as validated, an assumption we state openly); shift length only 480 min validated |
 | **Plausible range** | workers 1–12; outside this the input is an error |
 | Allowed values | order book `norm` (normal week) or `over20` (+20 % orders) |
 | Outputs and required precision | overtime after the Friday shift, ±0.15 h |
@@ -132,7 +132,7 @@ The AI can use only four tools: `capabilities` (what can this case answer), `kno
 | 4. Replications | run the model repeatedly until the result is precise enough (5.3) | at the cap: **answer with a warning** "precision not reached" | one run is not an answer (Law 2023, pp. 1488–1489) |
 | 5. Paired comparison (`compare` only) | both scenarios on the same random numbers; is the difference distinguishable from zero? | **"no measurable difference"** | paired comparison (Law 2023, p. 1498); common random numbers (Goldsman et al. 2005, p. 183) |
 
-This gives a **three-tier rule**: inside the validated range → answer; the model has the mechanism but the input is outside the validated range → answer with a warning; the model does not contain the mechanism at all (e.g. machine breakdowns in Case 2) → refusal. Every warning is written by code, not by the AI, and every number comes from the simulation. Each check can be switched off on its own, so the experiments can measure what each check contributes (ablation).
+This gives a **three-tier rule**: inside the validated range → answer; the model has the mechanism but the input is outside the validated range → answer with a warning; the question is outside the model (e.g. costs in euros in Case 2) → refusal. Every warning is written by code, not by the AI. Every number is produced by the simulation; the AI copies it into the answer (a prompt rule; a code check that compares the answer with the tool result is planned for P3). Each check can be switched off on its own, so the experiments can measure what each check contributes (ablation).
 
 ### 5.3 How often the simulation is repeated
 The AI answers each question **once**; the **simulation inside that answer** is repeated:
@@ -152,7 +152,7 @@ For Case 1, one run takes 30–45 minutes, so it uses a fixed set of 6 pre-compu
 1. The AI reads the question and chooses a tool and its parameters.
 2. The check engine checks the call and runs the simulation.
 3. A call that was sent back may be corrected; at most 6 tool calls per question, then the answer is a refusal.
-4. The AI writes the answer text; numbers and warnings are taken from the result unchanged.
+4. The AI writes the answer text and copies the number from the result; warnings are copied by code, unchanged.
 
 > **Why so restricted?** Small models lose track in long multi-step tool use (Patil et al. 2025, Table 1). A short, fixed path with one structured call per step keeps them on track. The prompt-rules comparison (setup B in section 7) tests whether the same rules written as instructions would be enough.
 
@@ -172,12 +172,12 @@ A first feasibility test with three setups is summarised in [`docs/feasibility_t
 | Process | Tool | Purpose | Why this tool |
 |---|---|---|---|
 | Simulation | JaamSim (Case 2), SimPy (Case 3), the published Python simulator of SMT2020 (Case 1) | Computer models of the factories: show what happens if orders, workers or machines change | We use each case in the tool its authors published it in, so our baseline can be compared with their results without re-coding the model. All are free, open source and run without a screen, so thousands of scenarios run automatically |
-| AI model | Open-source LLMs (Qwen 2.5 7B, Llama 3.1 8B, Gemma 2 9B, Mistral 7B), served by Ollama | The AI that understands plain-language questions; runs on our own computer | Open models can run locally (data stays in-house); Ollama runs many models the same way, so we can compare several |
+| AI model | Open-source LLMs (Qwen 2.5 7B, Llama 3.1 8B, Gemma 2 9B, Mistral 7B tested but not yet usable with our answer format), served by Ollama | The AI that understands plain-language questions; runs on our own computer | Open models can run locally (data stays in-house); Ollama runs many models the same way, so we can compare several |
 | Connection to the AI | OpenAI-compatible interface (`openai` Python client) | One way of calling any model | The same code works with Ollama, llama.cpp or vLLM, so changing the model or the server needs no code change |
 | Workflow | LangGraph | Fixed loop: AI chooses a tool → code runs it and checks it → result back to the AI → final answer; stop after at most 6 tool calls | The order of steps is written as a graph in code, not left to the AI. This is the "AI proposes, code verifies" principle (Kambhampati et al. 2024) as a program: the AI cannot skip a check or call the simulation directly |
 | Check engine (code checks) | Python, NumPy, SciPy | The five checks: scope, units and plausibility, validated range, replications with 95 % confidence interval, paired comparison | SciPy gives the t-distribution for the confidence interval and the paired test; plain Python keeps every rule readable and testable |
 | Tool interface | MCP server (Model Context Protocol, `mcp` Python SDK) | Offers the four checked tools (capabilities, knowledge lookup, estimate, compare) to any AI application that speaks MCP | Our own workflow calls the check engine directly in Python (same code, no extra process, faster experiments). The MCP server is the same engine behind an open standard, so a company can connect it to the local AI chat it already uses (for example Open WebUI or LibreChat) without our code; the checks still run on every call |
-| Case cards | YAML files, checked with Pydantic and JSON Schema | One file per case: valid inputs, outputs, ranges, what the model cannot answer | YAML is readable by a planner, not only by programmers; the schema check stops a wrong case card before it is used |
+| Case cards | YAML files, checked by a small validator when loaded; tool results checked with Pydantic and JSON Schema | One file per case: valid inputs, outputs, ranges, what the model cannot answer | YAML is readable by a planner, not only by programmers; the schema check stops a wrong case card before it is used |
 | Evaluation | Python scripts (question runner and grader) | Asks every test question in each setup and grades the answer: correct, cautious or confidently wrong | Fixed questions and fixed grading rules, so every run is repeatable and comparable (section 7) |
 | Tests | pytest; GitHub Actions from P3 | Automatic tests for every check and the workflow | A changed rule must not break another; tests run on every change (course requirement P3: unit/CI status) |
 | Interface | Gradio (planned, P3) | A simple web page to ask questions and see the answer with its confidence interval | A web page in a few lines of Python, no separate front-end project |
@@ -210,7 +210,7 @@ A first feasibility test with three setups is summarised in [`docs/feasibility_t
 | Split into development and test | fixed | random split with a fixed seed; the questions of the held-out case are sealed with a fingerprint (hash), so it can be shown later that they did not change |
 | Answer of the assistant | produced | each time: the AI chooses the scenario, the check engine runs the simulation, the result is compared with the stored answer |
 
-Each answer is graded **correct** (within tolerance, or a correct refusal or warning), **cautious** (no number, but a sound reason) or **confidently wrong** (a wrong number without a warning).
+Each answer is graded **correct** (within tolerance, or a correct refusal or warning), **cautious** (no number or option, or a wrong number that carries a warning) or **confidently wrong** (a wrong number or option without a warning, a missing required refusal, or a missing validity warning). The grading rules are code (`eval/grade.py`), so they are the same for every setup.
 
 > **Why not ask each question several times?** The AI runs with temperature 0 (no randomness) and the simulations use fixed random seeds, so the same question gives the same answer again. Repeating adds no information; more *different* questions (reworded variants, new scenarios) and several AI models do.
 >

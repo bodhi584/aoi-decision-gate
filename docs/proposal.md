@@ -1,5 +1,7 @@
 # One-page proposal (P1, 20 Oct 2026)
 
+*As submitted on 20 Oct 2026. Updates since then: Cases 3 and 4 now have candidates (pallet warehouse; press line as held-out test case), see [`cases/`](../cases/README.md); the full role list is in the [README, section 8](../README.md#8-team-who-does-what).*
+
 **Course:** MDM2 – Case Study: Intelligent Systems in Production
 **Team:** Team 1 · Yu Han · Melisa Subasi · Meron Hagos · Alejandro Rivas
 **Project title:** Planner Copilot: A Local AI Assistant for Production Planning Simulations
