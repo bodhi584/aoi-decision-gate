@@ -167,6 +167,17 @@ For Case 1, one run takes 30–45 minutes, so it uses a fixed set of 6 pre-compu
 
 > **Why so restricted?** Small models lose track in long multi-step tool use (Patil et al. 2025, Table 1). A short, fixed path with one structured call per step keeps them on track. The prompt-rules comparison (setup B in section 7) tests whether the same rules written as instructions would be enough.
 
+### 5.5 MVP: what already works
+The first version runs end to end on our cases with a local open-source model (Qwen 2.5, 7 billion parameters). Three real answers from our development run on Case 2 (17 Oct 2026):
+
+| Question | Answer of Planner Copilot | What the checks did |
+|---|---|---|
+| "Normal week, current staffing: how many hours after the Friday shift until all orders are done?" | 3.37 h (expert result: 3.31 h) ✓ | all checks passed; number from the simulation |
+| "+20 % orders and only 2 workers?" | about 38 h, **with a warning**: outside the validated range (3–4 workers), indicative only ✓ | validated-range check (3) added the warning |
+| "What will the overtime cost in euros?" | **refused**: the model has no cost data; it answers overtime and unfinished orders ✓ | scope check (1) refused |
+
+A first feasibility test with three setups is summarised in [`docs/feasibility_test.md`](docs/feasibility_test.md): confidently wrong answers fell from 16 of 40 without checks to 1 of 40 with Planner Copilot.
+
 ## 6. Technology stack
 
 | Process | Tool | Purpose | Why this tool |
