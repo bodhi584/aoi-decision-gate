@@ -29,10 +29,10 @@ We plan to use published simulation cases (public data) from about 4 industries 
 | | Date | Deliverable |
 |---|---|---|
 | P1 | 20 Oct | proposal, team, GitHub |
-| P2 | 3 Nov | literature review, cases chosen |
+| P2 | 3 Nov | literature report, method outline, baseline simulation |
 | P3 | 24 Nov | cases rebuilt, first version of the assistant |
 | P4 | 8 Dec | first experiments |
-| P5 | 22 Dec | full evaluation, report draft |
+| P5 | 22 Dec | demo, experiments and analysis, report draft |
 | Final | 12 Jan | final presentation, report, demo video |
 
 ## 6) Risks and ethics
