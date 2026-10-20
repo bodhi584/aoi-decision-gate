@@ -4,14 +4,16 @@ Last update: 20 Oct 2026
 
 ## Milestones
 
-| Milestone | Date | Deliverables | Status |
-|---|---|---|---|
-| **P1** | 20 Oct | Proposal, team, GitHub repository | ✅ done |
-| **P2** | 3 Nov | Literature report, method outline, baseline simulation; all four cases confirmed | 🔄 in progress |
-| **P3** | 24 Nov | Cases rebuilt, test questions, first version of the assistant | ⏳ planned |
-| **P4** | 8 Dec | First experiments | ⏳ planned |
-| **P5** | 22 Dec | Demo, experiments and analysis, report draft | ⏳ planned |
-| **Final** | 12 Jan | Final presentation, report, demo video | ⏳ planned |
+Each milestone follows the course requirements for the Software & Simulation track.
+
+| Milestone | Date | Course requirement | What we deliver | Status |
+|---|---|---|---|---|
+| **P1** | 20 Oct | Proposal + tech stack + MVP | Proposal ([`docs/proposal.md`](docs/proposal.md)), slides with tech stack and MVP ([`docs/P1_proposal_presentation.pdf`](docs/P1_proposal_presentation.pdf)), [README](README.md) | ✅ done |
+| **P2** | 3 Nov | Core code + baseline simulation; test plan + report | Code checks and workflow (core of Planner Copilot); all four cases running as baseline simulations; test plan; literature report and method | 🔄 in progress |
+| **P3** | 24 Nov | Feature progress; unit/CI status; issues board | First version of the assistant on all cases; unit tests run automatically on every change (CI); tasks tracked as issues | ⏳ planned |
+| **P4** | 8 Dec | Feature progress; unit/CI status; issues board | First experiments (three setups); test status and issues updated | ⏳ planned |
+| **P5** | 22 Dec | Demo video + run instructions; packaging status | Demo video, step-by-step run instructions, installable package | ⏳ planned |
+| **Final** | 12 Jan | Final presentation, report | Final presentation, final report, full evaluation including the held-out case | ⏳ planned |
 
 ## Timeline
 

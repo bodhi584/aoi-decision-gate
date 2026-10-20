@@ -263,14 +263,14 @@ A case is one published factory simulation model with known expert results. Deta
 
 ## 9. Timeline
 
-| Date | Milestone | Status |
-|---|---|---|
-| 20 Oct | Proposal, team, GitHub | ✅ |
-| 3 Nov | Literature report, method outline, baseline simulation | 🔄 |
-| 24 Nov | Cases rebuilt, first version of the assistant | ⏳ |
-| 8 Dec | First experiments | ⏳ |
-| 22 Dec | Demo, experiments and analysis, report draft | ⏳ |
-| 12 Jan | Final presentation, report, demo video | ⏳ |
+| Date | Course requirement (Software & Simulation) | Our milestone | Status |
+|---|---|---|---|
+| 20 Oct | Proposal + tech stack + MVP | Proposal, team, GitHub; MVP (section 5.5) | ✅ |
+| 3 Nov | Core code + baseline simulation; test plan + report | Literature report, method outline, core code, baseline simulation of all cases, test plan | 🔄 |
+| 24 Nov | Feature progress; unit/CI status; issues board | Cases rebuilt, first version of the assistant, automatic tests | ⏳ |
+| 8 Dec | Feature progress; unit/CI status; issues board | First experiments | ⏳ |
+| 22 Dec | Demo video + run instructions; packaging status | Demo, experiments and analysis, report draft, installable package | ⏳ |
+| 12 Jan | Final presentation, report | Final presentation, report, demo video | ⏳ |
 
 ![Project schedule](docs/img/gantt.png)
 
