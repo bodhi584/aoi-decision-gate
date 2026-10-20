@@ -86,7 +86,7 @@ The answer always comes from the simulation, never from the AI itself, and it sh
 
 ## 5. What we build: the core of Planner Copilot
 
-Planner Copilot is the layer between the AI model and the simulation model. The AI model and the simulation models are existing components that can be swapped; **the three layers in the middle are what we build**, and they are the contribution of this project.
+Planner Copilot is the layer between the AI model and the simulation model. The AI model and the simulation models are existing components that can be swapped; **the three layers in the middle are what we build** (blue in the diagram: the workflow, and the check engine with its case cards), and they are the contribution of this project.
 
 ![How Planner Copilot answers: workflow, check engine and case card between the AI model and the simulation](docs/img/core.png)
 
