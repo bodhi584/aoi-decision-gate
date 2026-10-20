@@ -252,12 +252,18 @@ A case is one published factory simulation model with known expert results. Deta
 
 | Yu Han | Melisa Subasi | Meron Hagos | Alejandro Rivas |
 |---|---|---|---|
-| **Team lead** | **Questions & report** | **Interface & literature** | **Experiments** |
+| **Team lead, system design and core code** | **Questions & report** | **Interface & literature** | **Experiments** |
 | Case 2 | Case 1 | Case 3 | Case 4 |
-| Code checks (guardrail engine) | Test questions | User interface | Experiments |
-| | Final report editor | Literature review | GitHub & demo |
+| Core design: case cards, check engine (5 checks), workflow | Test questions | User interface | Experiments |
+| MVP and feasibility test (P1, done) | Final report editor | Literature review | GitHub & demo |
+| First full version of the assistant on all cases (P3) | | | |
+| Unit tests and continuous integration (P3) | | | |
+| Installable package (P5) | | | |
+| Coordination: plan, milestones, issues board | | | |
 
-> **Why does everyone own one case?** Each case needs someone who knows its model in detail. It also spreads the work evenly.
+> **Why does everyone own one case?** Each case needs someone who knows its model in detail.
+>
+> **Why does the team lead also own the core code?** The case cards, the five checks and the workflow are one connected piece: every check reads the case card, and the workflow decides which check runs when. Split across people, the pieces would not fit together. So one person builds the whole core, and the others build on top of it (questions, interface, experiments).
 >
 > **Why does the owner of the held-out case run the experiments, not the code checks?** The person who writes the checks must not see the held-out test questions; otherwise the final test would not be fair.
 
