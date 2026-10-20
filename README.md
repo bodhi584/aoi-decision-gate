@@ -88,20 +88,9 @@ The answer always comes from the simulation, never from the AI itself, and it sh
 
 Planner Copilot is the layer between the AI model and the simulation model. The AI model and the simulation models are existing components that can be swapped; **the three layers in the middle are what we build**, and they are the contribution of this project.
 
-```
- planner's question
-        │
- ┌──────▼─────────────────────────────────────────────────────────────────┐
- │ 3. Workflow     the AI may only choose a tool and fill in parameters;  │
- │                 a rejected call goes back once more, then refusal      │
- │ 2. Check engine the same code for every case: scope → units →          │
- │                 validated range → replications → paired comparison     │
- │ 1. Case cards   one per case: what the model can answer and which      │
- │                 inputs are valid                                       │
- └──────┬─────────────────────────────────────────────────────────────────┘
-        │  only the check engine starts the simulation; the AI never does
- published simulation model  →  answer with confidence interval, warning or refusal
-```
+![How Planner Copilot answers: workflow, check engine and case card between the AI model and the simulation](docs/img/core.png)
+
+*Blue: the parts we build. Grey: existing parts that can be replaced. The three answers at the bottom are real outputs of our first version (Case 2, 17 Oct 2026). A tool call the check engine rejects goes back to the AI once more; if it is rejected again, the answer is a refusal. Only the check engine starts the simulation; the AI never does.*
 
 | Part | Who makes it | Can it be replaced? |
 |---|---|---|
