@@ -182,12 +182,18 @@ A first feasibility test with three setups is summarised in [`docs/feasibility_t
 
 | Process | Tool | Purpose | Why this tool |
 |---|---|---|---|
-| Simulation | JaamSim, Python | A computer model of a factory: shows what happens if orders, workers or machines change | The published cases are built in these tools; both are free, open source and run without a screen, so we can run thousands of scenarios automatically |
-| AI model | Open-source LLM (Ollama) | The AI that understands plain-language questions; runs on our own computer | Open models can run locally (data stays in-house); Ollama runs many different models the same way, so we can compare several |
-| Code checks | Python, MCP server | Checks every AI step and refuses unclear questions | MCP (Model Context Protocol) is an open standard for connecting AI models to tools; any model can use the same checked tools |
-| Interface | Gradio | A simple web page to ask questions and see charts | A web page in a few lines of Python, no separate front-end project |
-| Compute | Google Colab GPU | A cloud computer with a graphics card to run the AI | Free; it stands in for the company PC with a graphics card in the final setting. Only public data is used there |
-| Code sharing | GitHub | A shared place to store and track our code | Version history, review of each change, and this page for the lecturer |
+| Simulation | JaamSim (Case 2), SimPy (Case 3), the published Python simulator of SMT2020 (Case 1) | Computer models of the factories: show what happens if orders, workers or machines change | We use each case in the tool its authors published it in, so our baseline can be compared with their results without re-coding the model. All are free, open source and run without a screen, so thousands of scenarios run automatically |
+| AI model | Open-source LLMs (Qwen 2.5 7B, Llama 3.1 8B, Gemma 2 9B, Mistral 7B), served by Ollama | The AI that understands plain-language questions; runs on our own computer | Open models can run locally (data stays in-house); Ollama runs many models the same way, so we can compare several |
+| Connection to the AI | OpenAI-compatible interface (`openai` Python client) | One way of calling any model | The same code works with Ollama, llama.cpp or vLLM, so changing the model or the server needs no code change |
+| Workflow | LangGraph | Fixed loop: AI chooses a tool → code runs it and checks it → result back to the AI → final answer; stop after at most 6 tool calls | The order of steps is written as a graph in code, not left to the AI. This is the "AI proposes, code verifies" principle (Kambhampati et al. 2024) as a program: the AI cannot skip a check or call the simulation directly |
+| Check engine (code checks) | Python, NumPy, SciPy | The five checks: scope, units and plausibility, validated range, replications with 95 % confidence interval, paired comparison | SciPy gives the t-distribution for the confidence interval and the paired test; plain Python keeps every rule readable and testable |
+| Tool interface | MCP server (Model Context Protocol, `mcp` Python SDK) | Offers the four checked tools (capabilities, knowledge lookup, estimate, compare) to the AI | MCP is an open standard for connecting AI models to tools; any model or AI application can use the same checked tools |
+| Case cards | YAML files, checked with Pydantic and JSON Schema | One file per case: valid inputs, outputs, ranges, what the model cannot answer | YAML is readable by a planner, not only by programmers; the schema check stops a wrong case card before it is used |
+| Evaluation | Python scripts (question runner and grader) | Asks every test question in each setup and grades the answer: correct, cautious or confidently wrong | Fixed questions and fixed grading rules, so every run is repeatable and comparable (section 7) |
+| Tests | pytest; GitHub Actions from P3 | Automatic tests for every check and the workflow | A changed rule must not break another; tests run on every change (course requirement P3: unit/CI status) |
+| Interface | Gradio (planned, P3) | A simple web page to ask questions and see the answer with its confidence interval | A web page in a few lines of Python, no separate front-end project |
+| Compute | Free cloud GPUs: Google Colab (first test) and Kaggle (2 × T4, later runs) | A computer with a graphics card to run the AI | Free; it stands in for the company PC with a graphics card in the final setting. Two providers double the free GPU time. Only public data is used there |
+| Code sharing | GitHub | A shared place to store and track our code | Version history, review of each change, issues board, and this page for the lecturer |
 
 *Tools may change as the project progresses.*
 
@@ -297,7 +303,7 @@ A case is one published factory simulation model with known expert results. Deta
 
 | Component | Specification | Cost |
 |---|---|---|
-| GPU access (Google Colab) | Cloud GPU for the local AI | Free tier, to be confirmed |
+| GPU access (Google Colab, Kaggle) | Cloud GPU for the local AI | Free tier (Kaggle: 30 GPU hours per week) |
 | Simulation cases and data | Published, public | Free |
 | Software | Open source | Free |
 
