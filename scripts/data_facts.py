@@ -13,8 +13,8 @@ from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import cross_val_predict
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gate.data import boards, load  # noqa: E402
-from gate.model import make_classifier, to_X  # noqa: E402
+from aoi_classification.data import boards, load  # noqa: E402
+from aoi_classification.model import make_classifier, to_X  # noqa: E402
 
 
 def main(path="data/dataset.csv"):

@@ -14,8 +14,8 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gate.data import load  # noqa: E402
-from gate.model import MODELS, board_scores, make_classifier, threshold_for, to_X  # noqa: E402
+from aoi_classification.data import load  # noqa: E402
+from aoi_classification.model import MODELS, board_scores, make_classifier, threshold_for, to_X  # noqa: E402
 
 
 def evaluate(train, test, model):

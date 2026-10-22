@@ -1,4 +1,4 @@
-"""Load the Siemens AOI data set (Pfab et al. 2024) and prepare it for the decision gate.
+"""Load the Siemens AOI data set (Pfab et al. 2024) and prepare it for classification.
 
 Each row is one solder joint that the AOI machine flagged as defective. The label `class` comes from
 the manual inspection station: 0 = false call (the joint is fine), 1 = true defect.

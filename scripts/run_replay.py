@@ -11,10 +11,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gate.data import load  # noqa: E402
-from gate.replay import replay, summary  # noqa: E402
+from aoi_classification.data import load  # noqa: E402
+from aoi_classification.replay import replay, summary  # noqa: E402
 
-from gate.model import MODELS  # noqa: E402
+from aoi_classification.model import MODELS  # noqa: E402
 
 POLICIES = {
     "train_once": dict(retrain_every=None),

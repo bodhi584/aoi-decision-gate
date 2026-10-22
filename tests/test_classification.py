@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from gate import Gate, replay, summary, threshold_for
-from gate.data import CATEGORICAL, boards
+from aoi_classification import FalseCallClassifier, replay, summary, threshold_for
+from aoi_classification.data import CATEGORICAL, boards
 
 
 def synthetic(days=40, boards_per_day=30, seed=0):
@@ -41,12 +41,12 @@ def test_threshold_releases_at_most_the_allowed_defects():
     assert ((scores < thr) & (defective == 0)).sum() == 3
 
 
-def test_gate_releases_some_false_calls_and_keeps_defects():
+def test_classifier_finds_some_false_calls_and_keeps_defects():
     df = synthetic()
-    gate = Gate(max_miss=0.0, calib_days=7).fit(df[df.day < 30])
-    b = gate.decide(df[df.day >= 30])
-    assert b.release[b.defective == 0].mean() > 0.3
-    assert b.release[b.defective == 1].mean() < 0.2
+    clf = FalseCallClassifier(max_miss=0.0, calib_days=7).fit(df[df.day < 30])
+    b = clf.classify(df[df.day >= 30])
+    assert b.predicted_false_call[b.defective == 0].mean() > 0.3
+    assert b.predicted_false_call[b.defective == 1].mean() < 0.2
 
 
 def test_replay_uses_only_past_days():
@@ -58,11 +58,11 @@ def test_replay_uses_only_past_days():
     assert s["boards"] == r.boards.sum()
 
 
-def test_gate_needs_defects_in_both_parts():
+def test_classifier_needs_defects_in_both_parts():
     df = synthetic()
     df["class"] = 0
     with pytest.raises(ValueError):
-        Gate().fit(df)
+        FalseCallClassifier().fit(df)
 
 
 def test_categorical_columns_exist():
@@ -73,6 +73,6 @@ def test_categorical_columns_exist():
 @pytest.mark.parametrize("model", ["logistic_regression", "random_forest", "neural_network"])
 def test_each_model_trains_and_decides(model):
     df = synthetic()
-    b = Gate(model=model, max_miss=0.0, calib_days=7).fit(df[df.day < 30]).decide(df[df.day >= 30])
-    assert set(b.columns) >= {"score", "defective", "release"}
-    assert b.release[b.defective == 0].mean() > 0.1
+    b = FalseCallClassifier(model=model, max_miss=0.0, calib_days=7).fit(df[df.day < 30]).classify(df[df.day >= 30])
+    assert set(b.columns) >= {"score", "defective", "predicted_false_call"}
+    assert b.predicted_false_call[b.defective == 0].mean() > 0.1

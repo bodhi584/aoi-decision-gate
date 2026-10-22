@@ -1,12 +1,12 @@
 """Day-by-day simulation of the production line (replay of the recorded days).
 
-The recorded days are played back in time order. On each day the gate decides every flagged board using only a
-model trained on earlier days, exactly as it would on the real line. The gate is retrained every `retrain_every`
+The recorded days are played back in time order. On each day every flagged board is classified using only a
+model trained on earlier days, exactly as it would on the real line. The classifier is retrained every `retrain_every`
 days (None = never, i.e. the model from the first training window is kept).
 """
 import pandas as pd
 
-from .model import Gate
+from .model import FalseCallClassifier
 
 
 def replay(df: pd.DataFrame, start_day: int, retrain_every: int | None = 7, window: int | None = None,
@@ -16,27 +16,27 @@ def replay(df: pd.DataFrame, start_day: int, retrain_every: int | None = 7, wind
 
     window: train only on the last `window` days (None = all past days).
     """
-    rows, gate, trained_on = [], None, None
+    rows, clf, trained_on = [], None, None
     for day in sorted(d for d in df["day"].unique() if d >= start_day):
-        if gate is None or (retrain_every is not None and day - trained_on >= retrain_every):
+        if clf is None or (retrain_every is not None and day - trained_on >= retrain_every):
             past = df[df["day"] < day]
             if window is not None:
                 past = past[past["day"] >= day - window]
             try:
-                gate, trained_on = Gate(max_miss=max_miss, calib_days=calib_days, seed=seed, model=model).fit(past), day
+                clf, trained_on = FalseCallClassifier(max_miss=max_miss, calib_days=calib_days, seed=seed, model=model).fit(past), day
             except ValueError:
-                if gate is None:
+                if clf is None:
                     raise
-                trained_on = day  # too few defects in the window: keep the current gate until the next update
-        b = gate.decide(df[df["day"] == day])
+                trained_on = day  # too few defects in the window: keep the current classifier until the next update
+        b = clf.classify(df[df["day"] == day])
         rows.append({
             "day": day,
             "boards": len(b),
             "false_call_boards": int((b.defective == 0).sum()),
             "defective_boards": int(b.defective.sum()),
-            "released_false_calls": int(((b.defective == 0) & b.release).sum()),
-            "released_defects": int(((b.defective == 1) & b.release).sum()),
-            "threshold": gate.threshold,
+            "released_false_calls": int(((b.defective == 0) & b.predicted_false_call).sum()),
+            "released_defects": int(((b.defective == 1) & b.predicted_false_call).sum()),
+            "threshold": clf.threshold,
             "trained_on_day": trained_on,
         })
     return pd.DataFrame(rows)

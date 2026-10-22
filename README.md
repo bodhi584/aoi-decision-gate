@@ -1,6 +1,6 @@
 # AI-powered Quality Control and Defect Detection in Electronics Assembly
 
-**Reducing false calls of automated optical inspection (AOI) with an AI decision gate, on Siemens production data**
+**Reducing false calls of automated optical inspection (AOI) by binary classification, on Siemens production data**
 
 [![CI](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml)
 
@@ -11,7 +11,7 @@ Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas
 
 Based on the lecture example **“Siemens – Quality Control and Defect Detection”** (lecture slides, p. 18).
 
-**Aim:** this project aims to explore how an AI-powered decision gate can be integrated after automated optical inspection (AOI) to release false calls on a real Siemens line, while at most 1 % of defective boards are released.
+**Aim:** this project aims to reduce false calls after automated optical inspection (AOI): a binary classifier decides for each AOI alarm whether it is a true defect or a false call, while at most 1 % of defective boards are classified as false calls.
 
 **Key motivations:** reduce dependence on manual quality checks · keep product quality · increase efficiency of the assembly line. Benefits as in the lecture example: *improved product quality, reduced waste, increased efficiency*. Every number on this page comes from a cited source or from a result file in [`results/`](results/).
 
@@ -45,13 +45,13 @@ After soldering, an **automated optical inspection (AOI)** machine checks every 
 
 ## 3. Input → System → Output
 
-![Soldered board → AOI machine → AI decision gate → release or manual inspection](docs/img/system.png)
+![AOI alarm → binary classification → true defect or false call](docs/img/system.png)
 
 | | |
 |---|---|
-| **Input** | AOI measurements of each flagged solder joint (about 70 values), inspection type, component type, AOI error code |
-| **System** | A classifier trained on past manual-inspection results, plus a release threshold set so that at most 1 % of defective boards are released |
-| **Output** | Per board: **release** (skip manual inspection) or **send to manual inspection** |
+| **Input** | AOI alarm: measurements of each flagged solder joint (about 70 values), inspection type, component type, AOI error code |
+| **System** | Binary classification (supervised machine learning) trained on past manual-inspection results; classification threshold set so that at most 1 % of defective boards are classified as false calls |
+| **Output** | Per board: is the AOI alarm real? **True defect** (→ manual inspection, repair) or **false call** (→ skip manual inspection) |
 | **Impact** | Less manual inspection work (cost, throughput) without lowering quality |
 
 > **Why these labels?** They are produced every day at the manual station anyway, so no extra labelling is needed in a factory.
@@ -69,7 +69,7 @@ We follow **CRISP-DM** (Cross-Industry Standard Process for Data Mining; Chapman
 | Evaluation | **Day-by-day simulation** of the line (section 6): precision, recall, defective boards released, manual inspections saved |
 | Deployment | Demo video and run instructions (P5) |
 
-**Day-by-day simulation.** The recorded days are played back in time order. On each day the gate decides every flagged board with a model trained only on earlier days, exactly as on the real line. We compare training once with retraining every week. Code: [`gate/replay.py`](gate/replay.py); step by step: [`model_training.ipynb`](model_training.ipynb).
+**Day-by-day simulation.** The recorded days are played back in time order. On each day every flagged board is classified by a model trained only on earlier days, exactly as on the real line. We compare training once with retraining every week. Code: [`aoi_classification/replay.py`](aoi_classification/replay.py); step by step: [`model_training.ipynb`](model_training.ipynb).
 
 > **Why a day-by-day simulation instead of a random train/test split?** A random split mixes future and past. It looks much better than reality on this data (section 6), so it would overstate what a factory gets.
 
@@ -86,7 +86,7 @@ We follow **CRISP-DM** (Cross-Industry Standard Process for Data Mining; Chapman
 
 ## 6. First results
 
-**Baseline** ([`scripts/run_baseline.py`](scripts/run_baseline.py), [`results/baseline.json`](results/baseline.json)): each model is trained on the first 70 % of the records and tested on the rest (time order), compared with a random split. The number is the share of false-call boards that could be released while 99 % of defective boards still go to manual inspection.
+**Baseline** ([`scripts/run_baseline.py`](scripts/run_baseline.py), [`results/baseline.json`](results/baseline.json)): each model is trained on the first 70 % of the records and tested on the rest (time order), compared with a random split. The number is the share of false calls correctly identified (manual inspections that could be skipped) while 99 % of defective boards are still caught.
 
 | Model | Random 70/30 split (as often done in papers) | **Time order (as on the real line)** |
 |---|---|---|
@@ -100,7 +100,7 @@ These rates are read from the test period itself, so they are an upper bound.
 
 **Day-by-day simulation** ([`scripts/run_replay.py`](scripts/run_replay.py), [`results/replay.json`](results/replay.json)): second half of the records (39 production days, 17,366 flagged boards), thresholds set on past days only.
 
-| Model | Training | False-call boards released (manual inspections saved) | Defective boards released |
+| Model | Training | False calls correctly identified (manual inspections saved) | Defective boards missed |
 |---|---|---|---|
 | Logistic regression | once | 15.0 % (2,523) | **3.38 %** (20 of 592) |
 | Logistic regression | every week | 11.6 % (1,949) | **2.20 %** (13 of 592) |
@@ -111,7 +111,7 @@ These rates are read from the test period itself, so they are an upper bound.
 
 ![Day-by-day simulation](docs/img/results.png)
 
-**What this shows:** all three models save manual inspections, but none keeps the 1 % limit on later days, because the line changes over time. Handling these changes is the main challenge for the next milestones.
+**What this shows:** all three models save manual inspections, but none keeps the 1 % limit on missed defects on later days, because the line changes over time. Handling these changes is the main challenge for the next milestones.
 
 ## What we deliver
 
@@ -119,18 +119,18 @@ A **software prototype**, not a product installed in a factory:
 
 | Deliverable | What it is |
 |---|---|
-| **AI decision gate** | A Python package (`gate/`): train on past inspection records, decide for each board (release or manual inspection), simulate the line day by day |
+| **Classifier** | A Python package (`aoi_classification/`): train on past manual-inspection results, classify each flagged board (true defect or false call), simulate the line day by day |
 | **Notebook** | [`model_training.ipynb`](model_training.ipynb): the three models step by step, with precision, recall and the confusion matrix |
 | **Evidence** | Result files for every reported number, tests on every push, demo video, final report |
 
-In a factory the gate would run between the AOI machine and the manual inspection station; connecting it to a real line is not part of the course project. 
+In a factory the classifier would run between the AOI machine and the manual inspection station; connecting it to a real line is not part of the course project. 
 
 ## 7. Goals and KPIs
 
 | KPI | Baseline (time order) | Target (12 Jan) |
 |---|---|---|
-| Defective boards released | 2.2–3.7 % (day-by-day simulation) | **≤ 1 %** |
-| False-call boards released (manual inspections saved) | 6.4 % (best model, time order) | **≥ 20 %** |
+| Defective boards missed (classified as false call) | 2.2–3.7 % (day-by-day simulation) | **≤ 1 %** |
+| False calls correctly identified (manual inspections saved) | 6.4 % (best model, time order) | **≥ 20 %** |
 | Decision time per board | – | **< 1 s** on a normal laptop |
 
 Targets are fixed now, before the main experiments.
@@ -140,13 +140,13 @@ Targets are fixed now, before the main experiments.
 - One Siemens production line, five inspection types, 132 days.
 - Measurements are anonymised (scaled to 0–1, no physical names), so explanations can name a feature but not its physical meaning.
 - Labels come from operators and may contain errors.
-- No images: the gate works on AOI measurements, not on camera images.
+- No images: the classifier works on AOI measurements, not on camera images.
 - Data licence is non-commercial (course use only); no personal data.
 - Main risk: the line changes over time, so the 1 % limit may not hold on later days. Fallback: report what works, what does not, and why.
 
 ## Future work
 
-The next step after the course is a real line with an industry partner: (1) an electronics plant shares AOI and manual-inspection records under a data agreement; (2) an interface reads each board's AOI result from the machine or MES (for example via the IPC-CFX standard or a vendor export) and sends the gate's decision to the repair station; (3) **shadow mode**: the gate runs next to the operators and only logs its decisions; (4) the plant's quality engineers compare the logs and approve go-live, starting with one inspection type.
+The next step after the course is a real line with an industry partner: (1) an electronics plant shares AOI and manual-inspection records under a data agreement; (2) an interface reads each board's AOI result from the machine or MES (for example via the IPC-CFX standard or a vendor export) and sends the classification to the repair station; (3) **shadow mode**: the classifier runs next to the operators and only logs its decisions; (4) the plant's quality engineers compare the logs and approve go-live, starting with one inspection type.
 
 ## 9. Timeline
 
@@ -172,7 +172,7 @@ python scripts/make_figures.py       # docs/img/*.png
 ## 11. Repository
 
 ```
-gate/       data loading, decision gate (classifier + threshold), day-by-day simulation
+aoi_classification/   data loading, binary classifier (model + threshold), day-by-day simulation
 scripts/    data download, baseline, simulation, figures
 tests/      unit tests (run automatically on every push)
 results/    result files of every run shown on this page

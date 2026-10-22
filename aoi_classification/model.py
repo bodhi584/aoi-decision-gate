@@ -1,6 +1,7 @@
-"""The decision gate: a classifier on AOI measurements plus a release threshold.
+"""Supervised binary classification of AOI alarms: true defect (1) or false call (0).
 
-A board is released (skips manual inspection) only if every flagged joint on it scores below the threshold.
+A board is classified as a false call (skips manual inspection) only if every flagged joint on it scores below the
+classification threshold.
 The threshold is chosen on past data so that at most `max_miss` of the defective boards would have been released.
 
 Three standard classifiers from scikit-learn, as in the lecture and its example project:
@@ -69,13 +70,13 @@ def threshold_for(scores: np.ndarray, defective: np.ndarray, max_miss: float) ->
 
 
 @dataclass
-class Gate:
+class FalseCallClassifier:
     max_miss: float = 0.01
     calib_days: int = 14
     seed: int = 0
     model: str = DEFAULT_MODEL
 
-    def fit(self, df: pd.DataFrame) -> "Gate":
+    def fit(self, df: pd.DataFrame) -> "FalseCallClassifier":
         """Train on all but the last `calib_days` days and set the threshold on those held-back days.
 
         The threshold is only valid for the model it was set on, so that model is the one used for decisions.
@@ -89,8 +90,8 @@ class Gate:
         self.threshold = threshold_for(b["score"].values, b["defective"].values, self.max_miss)
         return self
 
-    def decide(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Return one row per board with `release` (True = skip manual inspection)."""
+    def classify(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Return one row per board: `predicted_false_call` (True = false call, skip manual inspection; False = true defect)."""
         b = board_scores(df, self.clf.predict_proba(to_X(df))[:, 1])
-        b["release"] = b["score"] < self.threshold
+        b["predicted_false_call"] = b["score"] < self.threshold
         return b
