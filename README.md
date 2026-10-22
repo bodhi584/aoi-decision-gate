@@ -1,6 +1,6 @@
-# AI-powered Quality Control and Defect Detection in Electronics Assembly
+# Second Check of AOI Results with Supervised Machine Learning
 
-**Reducing false calls of automated optical inspection (AOI) by binary classification, on Siemens production data**
+**Quality control and defect detection in electronics assembly: binary classification of AOI alarms into true defects and false calls, on Siemens production data**
 
 [![CI](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml)
 
