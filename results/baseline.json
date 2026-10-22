@@ -1,18 +1,56 @@
 {
-  "time_split": {
-    "joint_auroc": 0.889,
-    "test_boards": 10466,
-    "test_defective_boards": 520,
-    "released_false_calls_pct_at_100pct_caught": 1.8,
-    "released_false_calls_pct_at_99pct_caught": 8.2,
-    "released_false_calls_pct_at_95pct_caught": 19.2
+  "logistic_regression": {
+    "time_split": {
+      "joint_auroc": 0.85,
+      "test_boards": 10466,
+      "test_defective_boards": 520,
+      "released_false_calls_pct_at_100pct_caught": 1.4,
+      "released_false_calls_pct_at_99pct_caught": 2.1,
+      "released_false_calls_pct_at_95pct_caught": 15.4
+    },
+    "random_split": {
+      "joint_auroc": 0.903,
+      "test_boards": 11923,
+      "test_defective_boards": 265,
+      "released_false_calls_pct_at_100pct_caught": 2.0,
+      "released_false_calls_pct_at_99pct_caught": 14.2,
+      "released_false_calls_pct_at_95pct_caught": 39.0
+    }
   },
-  "random_split": {
-    "joint_auroc": 0.966,
-    "test_boards": 11923,
-    "test_defective_boards": 265,
-    "released_false_calls_pct_at_100pct_caught": 23.6,
-    "released_false_calls_pct_at_99pct_caught": 29.0,
-    "released_false_calls_pct_at_95pct_caught": 62.2
+  "random_forest": {
+    "time_split": {
+      "joint_auroc": 0.885,
+      "test_boards": 10466,
+      "test_defective_boards": 520,
+      "released_false_calls_pct_at_100pct_caught": 2.7,
+      "released_false_calls_pct_at_99pct_caught": 6.4,
+      "released_false_calls_pct_at_95pct_caught": 21.3
+    },
+    "random_split": {
+      "joint_auroc": 0.968,
+      "test_boards": 11923,
+      "test_defective_boards": 265,
+      "released_false_calls_pct_at_100pct_caught": 11.3,
+      "released_false_calls_pct_at_99pct_caught": 18.4,
+      "released_false_calls_pct_at_95pct_caught": 46.3
+    }
+  },
+  "neural_network": {
+    "time_split": {
+      "joint_auroc": 0.872,
+      "test_boards": 10466,
+      "test_defective_boards": 520,
+      "released_false_calls_pct_at_100pct_caught": 0.1,
+      "released_false_calls_pct_at_99pct_caught": 1.8,
+      "released_false_calls_pct_at_95pct_caught": 16.2
+    },
+    "random_split": {
+      "joint_auroc": 0.935,
+      "test_boards": 11923,
+      "test_defective_boards": 265,
+      "released_false_calls_pct_at_100pct_caught": 0.0,
+      "released_false_calls_pct_at_99pct_caught": 16.2,
+      "released_false_calls_pct_at_95pct_caught": 47.2
+    }
   }
 }

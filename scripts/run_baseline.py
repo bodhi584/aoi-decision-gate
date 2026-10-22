@@ -1,4 +1,4 @@
-"""Baseline: how well can a classifier separate false calls from true defects, and how much does the split matter?
+"""Baseline: how well can each classifier (logistic regression, random forest, neural network) separate false calls from true defects, and how much does the split matter?
 
 Train on the first 70 % of the records (time order) and test on the rest, versus a random 70/30 split of boards.
 Reports joint-level AUROC and, on the test boards, the share of false-call boards that could be released
@@ -15,11 +15,11 @@ from sklearn.metrics import roc_auc_score
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from gate.data import load  # noqa: E402
-from gate.model import board_scores, make_classifier, threshold_for, to_X  # noqa: E402
+from gate.model import MODELS, board_scores, make_classifier, threshold_for, to_X  # noqa: E402
 
 
-def evaluate(train, test):
-    clf = make_classifier().fit(to_X(train), train["class"])
+def evaluate(train, test, model):
+    clf = make_classifier(model).fit(to_X(train), train["class"])
     p = clf.predict_proba(to_X(test))[:, 1]
     b = board_scores(test, p)
     out = {"joint_auroc": round(roc_auc_score(test["class"], p), 3), "test_boards": len(b),
@@ -34,14 +34,16 @@ def evaluate(train, test):
 def main(path="data/dataset.csv"):
     df = load(path)
     cut = df["day"].quantile(0.7)
-    res = {"time_split": evaluate(df[df.day <= cut], df[df.day > cut])}
     ub = df["board"].unique()
     tb = set(np.random.RandomState(0).choice(ub, int(0.7 * len(ub)), replace=False))
     m = df["board"].isin(tb)
-    res["random_split"] = evaluate(df[m], df[~m])
+    res = {}
+    for model in MODELS:
+        res[model] = {"time_split": evaluate(df[df.day <= cut], df[df.day > cut], model),
+                      "random_split": evaluate(df[m], df[~m], model)}
+        print(model, json.dumps(res[model]), flush=True)
     Path("results").mkdir(exist_ok=True)
     Path("results/baseline.json").write_text(json.dumps(res, indent=2))
-    print(json.dumps(res, indent=2))
 
 
 if __name__ == "__main__":

@@ -9,13 +9,12 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import cross_val_predict
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from gate.data import boards, load  # noqa: E402
-from gate.model import to_X  # noqa: E402
+from gate.model import make_classifier, to_X  # noqa: E402
 
 
 def main(path="data/dataset.csv"):
@@ -24,7 +23,7 @@ def main(path="data/dataset.csv"):
     weekly = b.groupby(b.day // 7).agg(boards=("defective", "size"), defective=("defective", "sum"))
     e, l = df[df.day <= df.day.quantile(0.3)], df[df.day >= df.day.quantile(0.7)]
     s = pd.concat([e.assign(period=0), l.assign(period=1)]).sample(120_000, random_state=0)
-    p = cross_val_predict(HistGradientBoostingClassifier(max_iter=100, categorical_features="from_dtype"),
+    p = cross_val_predict(make_classifier("random_forest"),
                           to_X(s), s.period, cv=3, method="predict_proba")[:, 1]
     facts = {
         "joints": len(df), "boards": len(b), "calendar_days": int(df.day.max()) + 1,

@@ -65,13 +65,13 @@ We follow **CRISP-DM** (Cross-Industry Standard Process for Data Mining; Chapman
 | Business understanding | False-call problem, KPIs and limits (sections 1, 2, 7) |
 | Data understanding | Siemens AOI data: structure, imbalance, drift ([`results/data_facts.json`](results/data_facts.json)) |
 | Data preparation | Group joints into boards, encode categories, split strictly by time |
-| Modelling | Gradient-boosted trees (baseline) and a neural network (planned, PyTorch) |
-| Evaluation | **Replay simulation** of the line (section 6) with production KPIs |
-| Deployment | Replay demo and run instructions (P5) |
+| Modelling | Three standard models (scikit-learn): logistic regression (baseline), random forest, neural network with one hidden layer (lecture p. 12, 17) |
+| Evaluation | **Day-by-day simulation** of the line (section 6): precision, recall, defective boards released, manual inspections saved |
+| Deployment | Demo video and run instructions (P5) |
 
-**Replay simulation.** The recorded days are played back in time order. On each day the gate decides every flagged board with a model trained only on earlier days, exactly as on the real line. The gate is updated on a schedule; we compare update policies. Code: [`gate/replay.py`](gate/replay.py).
+**Day-by-day simulation.** The recorded days are played back in time order. On each day the gate decides every flagged board with a model trained only on earlier days, exactly as on the real line. We compare training once with retraining every week. Code: [`gate/replay.py`](gate/replay.py); step by step: [`model_training.ipynb`](model_training.ipynb).
 
-> **Why a replay instead of a random train/test split?** A random split mixes future and past. It looks much better than reality on this data (section 6), so it would overstate what a factory gets.
+> **Why a day-by-day simulation instead of a random train/test split?** A random split mixes future and past. It looks much better than reality on this data (section 6), so it would overstate what a factory gets.
 
 ## 5. Data
 
@@ -81,33 +81,37 @@ We follow **CRISP-DM** (Cross-Industry Standard Process for Data Mining; Chapman
 | Repository | Mendeley Data, DOI [10.17632/99jzmh9658.2](https://data.mendeley.com/datasets/99jzmh9658/2) |
 | Content | 440,274 flagged solder joints on 39,742 boards, 5 inspection types, about 70 AOI measurements, 4 categorical fields (e.g. component type, error code); label: false call / true defect |
 | Period | 132 days of one production line of Siemens AG in Bavaria (101 days with records) |
-| Drift | A classifier can tell the first 30 % of days from the last 30 % from the measurements alone with AUROC 0.966: the line changes strongly over time |
+| Drift | A classifier can tell the first 30 % of days from the last 30 % from the measurements alone with AUROC 0.974: the line changes strongly over time |
 | Licence | CC BY-NC 3.0, owned by Siemens AG: **not stored here**; [`scripts/download_data.py`](scripts/download_data.py) downloads it and checks the checksum |
 
 ## 6. First results
 
-**Baseline** ([`scripts/run_baseline.py`](scripts/run_baseline.py), [`results/baseline.json`](results/baseline.json)): gradient-boosted trees, trained on the first 70 % of the records and tested on the rest, compared with a random split.
+**Baseline** ([`scripts/run_baseline.py`](scripts/run_baseline.py), [`results/baseline.json`](results/baseline.json)): each model is trained on the first 70 % of the records and tested on the rest (time order), compared with a random split. The number is the share of false-call boards that could be released while 99 % of defective boards still go to manual inspection.
 
-| Split | Joint-level AUROC | False-call boards that could be released while 99 % of defective boards still go to manual inspection |
+| Model | Random 70/30 split (as often done in papers) | **Time order (as on the real line)** |
 |---|---|---|
-| Random 70/30 (as often done in papers) | 0.966 | 29.0 % |
-| **Time order (as on the real line)** | **0.889** | **8.2 %** |
+| Logistic regression (baseline) | 14.2 % | **2.1 %** |
+| Random forest | 18.4 % | **6.4 %** |
+| Neural network (one hidden layer) | 16.2 % | **1.8 %** |
 
-These release rates are read from the test period itself, so they are an upper bound.
+These rates are read from the test period itself, so they are an upper bound.
 
-**Replay simulation** ([`scripts/run_replay.py`](scripts/run_replay.py), [`results/replay.json`](results/replay.json)): second half of the records, thresholds set on past days only.
+![Baseline](docs/img/baseline.png)
 
-| Update policy | False-call boards released (manual inspections saved) | Defective boards released |
-|---|---|---|
-| Train once, never update | 16.4 % (2,750 boards) | **3.89 %** (23 of 592) |
-| Retrain weekly on all past days | 14.4 % (2,418 boards) | **4.56 %** (27 of 592) |
-| Retrain weekly on the last 28 days | 3.2 % (542 boards) | **2.36 %** (14 of 592) |
+**Day-by-day simulation** ([`scripts/run_replay.py`](scripts/run_replay.py), [`results/replay.json`](results/replay.json)): second half of the records (39 production days, 17,366 flagged boards), thresholds set on past days only.
 
-Replayed: 39 production days, 17,366 flagged boards (day 85 onwards).
+| Model | Training | False-call boards released (manual inspections saved) | Defective boards released |
+|---|---|---|---|
+| Logistic regression | once | 15.0 % (2,523) | **3.38 %** (20 of 592) |
+| Logistic regression | every week | 11.6 % (1,949) | **2.20 %** (13 of 592) |
+| Random forest | once | 9.9 % (1,658) | **2.20 %** (13 of 592) |
+| Random forest | every week | 13.1 % (2,203) | **3.55 %** (21 of 592) |
+| Neural network | once | 11.9 % (1,996) | **3.21 %** (19 of 592) |
+| Neural network | every week | 6.5 % (1,098) | **3.72 %** (22 of 592) |
 
-![Baseline and replay results](docs/img/results.png)
+![Day-by-day simulation](docs/img/results.png)
 
-**What this shows:** drift is the main challenge. A threshold that releases at most 1 % of defective boards on past days does not keep that promise on later days. Detecting drift and choosing the right update policy are the core of the project.
+**What this shows:** all three models save manual inspections, but none keeps the 1 % limit on later days, because the line changes over time. Handling these changes is the main challenge for the next milestones.
 
 ## What we deliver
 
@@ -115,19 +119,19 @@ A **software prototype**, not a product installed in a factory:
 
 | Deliverable | What it is |
 |---|---|
-| **AI decision gate** | A Python package with a command-line tool: `train` on past inspection records, `decide` for one board (RELEASE or INSPECT, with score and main reasons), `replay` the line day by day |
-| **Replay dashboard** | A small web app: pick a day of the Siemens line, see each board's decision, manual checks saved, defects released, drift alarms |
+| **AI decision gate** | A Python package (`gate/`): train on past inspection records, decide for each board (release or manual inspection), simulate the line day by day |
+| **Notebook** | [`model_training.ipynb`](model_training.ipynb): the three models step by step, with precision, recall and the confusion matrix |
 | **Evidence** | Result files for every reported number, tests on every push, demo video, final report |
 
-In a factory the gate would run between the AOI machine and the manual inspection station; connecting it to a real line is not part of the course project. Today the package runs as Python modules (`gate/`) and scripts (`scripts/`); the command-line tool and dashboard follow in P3–P5.
+In a factory the gate would run between the AOI machine and the manual inspection station; connecting it to a real line is not part of the course project. 
 
 ## 7. Goals and KPIs
 
 | KPI | Baseline (time order) | Target (12 Jan) |
 |---|---|---|
-| Defective boards released | 2.4–4.6 % (replay) | **≤ 1 %** |
-| False-call boards released (manual inspections saved) | 8.2 % | **≥ 25 %** |
-| Drift alarm | none | alarm when performance drops |
+| Defective boards released | 2.2–3.7 % (day-by-day simulation) | **≤ 1 %** |
+| False-call boards released (manual inspections saved) | 6.4 % (best model, time order) | **≥ 20 %** |
+| Decision time per board | – | **< 1 s** on a normal laptop |
 
 Targets are fixed now, before the main experiments.
 
@@ -138,7 +142,7 @@ Targets are fixed now, before the main experiments.
 - Labels come from operators and may contain errors.
 - No images: the gate works on AOI measurements, not on camera images.
 - Data licence is non-commercial (course use only); no personal data.
-- Main risk: drift limits the release rate. Fallback: report which drift handling works, which does not, and why.
+- Main risk: the line changes over time, so the 1 % limit may not hold on later days. Fallback: report what works, what does not, and why.
 
 ## Future work
 
@@ -161,14 +165,15 @@ pip install -r requirements.txt pytest
 python -m pytest -q                  # unit tests (synthetic data)
 python scripts/download_data.py      # Siemens data, about 330 MB
 python scripts/run_baseline.py       # results/baseline.json
-python scripts/run_replay.py         # results/replay*.json / .csv
+python scripts/run_replay.py         # results/replay*.json / .csv (about 10 min)
+python scripts/make_figures.py       # docs/img/*.png
 ```
 
 ## 11. Repository
 
 ```
-gate/       data loading, decision gate (classifier + threshold), replay simulation
-scripts/    data download, baseline, replay
+gate/       data loading, decision gate (classifier + threshold), day-by-day simulation
+scripts/    data download, baseline, simulation, figures
 tests/      unit tests (run automatically on every push)
 results/    result files of every run shown on this page
 docs/       proposal, figures

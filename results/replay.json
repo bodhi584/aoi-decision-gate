@@ -1,33 +1,69 @@
 {
   "start_day": 85,
-  "static": {
-    "days": 39,
-    "boards": 17366,
-    "false_call_boards": 16774,
-    "defective_boards": 592,
-    "false_calls_released_pct": 16.4,
-    "defects_released": 23,
-    "defects_released_pct": 3.89,
-    "manual_inspections_saved": 2750
+  "logistic_regression": {
+    "train_once": {
+      "days": 39,
+      "boards": 17366,
+      "false_call_boards": 16774,
+      "defective_boards": 592,
+      "false_calls_released_pct": 15.0,
+      "defects_released": 20,
+      "defects_released_pct": 3.38,
+      "manual_inspections_saved": 2523
+    },
+    "retrain_weekly": {
+      "days": 39,
+      "boards": 17366,
+      "false_call_boards": 16774,
+      "defective_boards": 592,
+      "false_calls_released_pct": 11.6,
+      "defects_released": 13,
+      "defects_released_pct": 2.2,
+      "manual_inspections_saved": 1949
+    }
   },
-  "weekly_all_past": {
-    "days": 39,
-    "boards": 17366,
-    "false_call_boards": 16774,
-    "defective_boards": 592,
-    "false_calls_released_pct": 14.4,
-    "defects_released": 27,
-    "defects_released_pct": 4.56,
-    "manual_inspections_saved": 2418
+  "random_forest": {
+    "train_once": {
+      "days": 39,
+      "boards": 17366,
+      "false_call_boards": 16774,
+      "defective_boards": 592,
+      "false_calls_released_pct": 9.9,
+      "defects_released": 13,
+      "defects_released_pct": 2.2,
+      "manual_inspections_saved": 1658
+    },
+    "retrain_weekly": {
+      "days": 39,
+      "boards": 17366,
+      "false_call_boards": 16774,
+      "defective_boards": 592,
+      "false_calls_released_pct": 13.1,
+      "defects_released": 21,
+      "defects_released_pct": 3.55,
+      "manual_inspections_saved": 2203
+    }
   },
-  "weekly_last_28_days": {
-    "days": 39,
-    "boards": 17366,
-    "false_call_boards": 16774,
-    "defective_boards": 592,
-    "false_calls_released_pct": 3.2,
-    "defects_released": 14,
-    "defects_released_pct": 2.36,
-    "manual_inspections_saved": 542
+  "neural_network": {
+    "train_once": {
+      "days": 39,
+      "boards": 17366,
+      "false_call_boards": 16774,
+      "defective_boards": 592,
+      "false_calls_released_pct": 11.9,
+      "defects_released": 19,
+      "defects_released_pct": 3.21,
+      "manual_inspections_saved": 1996
+    },
+    "retrain_weekly": {
+      "days": 39,
+      "boards": 17366,
+      "false_call_boards": 16774,
+      "defective_boards": 592,
+      "false_calls_released_pct": 6.5,
+      "defects_released": 22,
+      "defects_released_pct": 3.72,
+      "manual_inspections_saved": 1098
+    }
   }
 }

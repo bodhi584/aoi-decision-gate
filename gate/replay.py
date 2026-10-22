@@ -1,4 +1,4 @@
-"""Replay simulation of the production line.
+"""Day-by-day simulation of the production line (replay of the recorded days).
 
 The recorded days are played back in time order. On each day the gate decides every flagged board using only a
 model trained on earlier days, exactly as it would on the real line. The gate is retrained every `retrain_every`
@@ -10,7 +10,8 @@ from .model import Gate
 
 
 def replay(df: pd.DataFrame, start_day: int, retrain_every: int | None = 7, window: int | None = None,
-           max_miss: float = 0.01, calib_days: int = 14, seed: int = 0) -> pd.DataFrame:
+           max_miss: float = 0.01, calib_days: int = 14, seed: int = 0,
+           model: str = "random_forest") -> pd.DataFrame:
     """Return one row per replayed day with released / inspected board counts.
 
     window: train only on the last `window` days (None = all past days).
@@ -22,7 +23,7 @@ def replay(df: pd.DataFrame, start_day: int, retrain_every: int | None = 7, wind
             if window is not None:
                 past = past[past["day"] >= day - window]
             try:
-                gate, trained_on = Gate(max_miss=max_miss, calib_days=calib_days, seed=seed).fit(past), day
+                gate, trained_on = Gate(max_miss=max_miss, calib_days=calib_days, seed=seed, model=model).fit(past), day
             except ValueError:
                 if gate is None:
                     raise

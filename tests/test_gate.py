@@ -68,3 +68,11 @@ def test_gate_needs_defects_in_both_parts():
 def test_categorical_columns_exist():
     df = synthetic(days=1)
     assert all(c in df for c in CATEGORICAL)
+
+
+@pytest.mark.parametrize("model", ["logistic_regression", "random_forest", "neural_network"])
+def test_each_model_trains_and_decides(model):
+    df = synthetic()
+    b = Gate(model=model, max_miss=0.0, calib_days=7).fit(df[df.day < 30]).decide(df[df.day >= 30])
+    assert set(b.columns) >= {"score", "defective", "release"}
+    assert b.release[b.defective == 0].mean() > 0.1

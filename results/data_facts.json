@@ -14,7 +14,7 @@
     "3": 151931,
     "4": 5443
   },
-  "drift_test_auroc_first_vs_last_30pct_days": 0.966,
+  "drift_test_auroc_first_vs_last_30pct_days": 0.974,
   "weekly_boards_and_defective_boards": {
     "0": [
       1688,
