@@ -148,6 +148,8 @@ Milestones follow the course requirements for the Software & Simulation track; d
 
 ## 10. Run it
 
+Runs on **Windows, macOS and Linux** (Python 3.11 or newer, no graphics card). The tests run on all three systems on every push.
+
 ```bash
 git clone https://github.com/bodhi584/aoi-decision-gate
 cd aoi-decision-gate
