@@ -9,7 +9,11 @@ Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas
 
 📄 One-page proposal: [`docs/proposal.pdf`](docs/proposal.pdf) ([Word](docs/proposal.docx)) · slides: [`docs/slides_revised_topic.pdf`](docs/slides_revised_topic.pdf) · progress and milestones: [`PROGRESS.md`](PROGRESS.md)
 
-Based on the lecture example **“Siemens – Quality Control and Defect Detection”** (lecture slides, p. 18). Every number on this page comes from a cited source or from a result file in [`results/`](results/).
+Based on the lecture example **“Siemens – Quality Control and Defect Detection”** (lecture slides, p. 18).
+
+**Aim:** this project aims to explore how an AI-powered decision gate can be integrated after automated optical inspection (AOI) to release false calls on a real Siemens line, while at most 1 % of defective boards are released.
+
+**Key motivations:** reduce dependence on manual quality checks · keep product quality · increase efficiency of the assembly line. Benefits as in the lecture example: *improved product quality, reduced waste, increased efficiency*. Every number on this page comes from a cited source or from a result file in [`results/`](results/).
 
 ---
 
