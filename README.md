@@ -105,6 +105,18 @@ Replayed: 39 production days, 17,366 flagged boards (day 85 onwards).
 
 **What this shows:** drift is the main challenge. A threshold that releases at most 1 % of defective boards on past days does not keep that promise on later days. Detecting drift and choosing the right update policy are the core of the project.
 
+## What we deliver
+
+A **software prototype**, not a product installed in a factory:
+
+| Deliverable | What it is |
+|---|---|
+| **AI decision gate** | A Python package with a command-line tool: `train` on past inspection records, `decide` for one board (RELEASE or INSPECT, with score and main reasons), `replay` the line day by day |
+| **Replay dashboard** | A small web app: pick a day of the Siemens line, see each board's decision, manual checks saved, defects released, drift alarms |
+| **Evidence** | Result files for every reported number, tests on every push, demo video, final report |
+
+In a factory the gate would run between the AOI machine and the manual inspection station; connecting it to a real line is not part of the course project. Today the package runs as Python modules (`gate/`) and scripts (`scripts/`); the command-line tool and dashboard follow in P3–P5.
+
 ## 7. Goals and KPIs
 
 | KPI | Baseline (time order) | Target (12 Jan) |
