@@ -1,6 +1,6 @@
-# AOI Decision Gate
+# AI-powered Quality Control and Defect Detection in Electronics Assembly
 
-**AI decision gate for false-call reduction in automated optical inspection (AOI) of electronics assembly**
+**Reducing false calls of automated optical inspection (AOI) with an AI decision gate, on Siemens production data**
 
 [![CI](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml)
 
