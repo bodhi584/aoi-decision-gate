@@ -2,7 +2,7 @@
 
 **Second check of AOI results with supervised machine learning (Siemens production data)**
 
-[![CI](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml)
+[![CI](https://github.com/bodhi584/aoi-false-call-classification/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-false-call-classification/actions/workflows/ci.yml)
 
 Case Study *Intelligent Systems in Production* · Technische Hochschule Deggendorf (THD) · Team 1 · guided by Dr. Hamidreza Heidari
 Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas
@@ -158,8 +158,8 @@ Milestones follow the course requirements for the Software & Simulation track; d
 Runs on **Windows, macOS and Linux** (Python 3.11 or newer, no graphics card). The tests run on all three systems on every push.
 
 ```bash
-git clone https://github.com/bodhi584/aoi-decision-gate
-cd aoi-decision-gate
+git clone https://github.com/bodhi584/aoi-false-call-classification
+cd aoi-false-call-classification
 pip install -r requirements.txt pytest
 python -m pytest -q                  # unit tests (synthetic data)
 python scripts/download_data.py      # Siemens data, about 330 MB
