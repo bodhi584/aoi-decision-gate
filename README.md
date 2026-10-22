@@ -1,6 +1,6 @@
 # Second Check of AOI Results with Supervised Machine Learning
 
-**Quality control and defect detection in electronics assembly: binary classification of AOI alarms into true defects and false calls, on Siemens production data**
+**Binary classification of AOI alarms into true defects and false calls (Siemens production data)**
 
 [![CI](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml)
 
