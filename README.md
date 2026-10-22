@@ -7,7 +7,7 @@
 Case Study *Intelligent Systems in Production* · Technische Hochschule Deggendorf (THD) · Team 1 · guided by Dr. Hamidreza Heidari
 Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas
 
-📄 One-page proposal: [`docs/proposal.pdf`](docs/proposal.pdf) ([Word](docs/proposal.docx)) · progress and milestones: [`PROGRESS.md`](PROGRESS.md)
+📄 One-page proposal: [`docs/proposal.pdf`](docs/proposal.pdf) ([Word](docs/proposal.docx)) · slides: [`docs/slides_revised_topic.pdf`](docs/slides_revised_topic.pdf) · progress and milestones: [`PROGRESS.md`](PROGRESS.md)
 
 Based on the lecture example **“Siemens – Quality Control and Defect Detection”** (lecture slides, p. 18). Every number on this page comes from a cited source or from a result file in [`results/`](results/).
 
