@@ -11,9 +11,9 @@ Yu Han (team lead) · Melisa Subasi · Meron Hagos · Alejandro Rivas
 
 Based on the lecture example **“Siemens – Quality Control and Defect Detection”** (lecture slides, p. 18).
 
-**Aim:** this project aims to reduce false calls after automated optical inspection (AOI): a binary classifier decides for each AOI alarm whether it is a true defect or a false call, while at most 1 % of defective boards are classified as false calls.
+**Aim:** this project aims to reduce false calls after automated optical inspection (AOI): a binary classifier decides for each AOI alarm whether it is a true defect or a false call, while at most 1 % of true defects are classified as false call (recall ≥ 99 %).
 
-**Key motivations:** reduce dependence on manual quality checks · keep product quality · increase efficiency of the assembly line. Benefits as in the lecture example: *improved product quality, reduced waste, increased efficiency*. Every number on this page comes from a cited source or from a result file in [`results/`](results/).
+**Key motivation:** fewer manual re-inspections of false calls (operator time, throughput), while true defects are still caught. Every number on this page comes from a cited source or from a result file in [`results/`](results/).
 
 ---
 
@@ -49,8 +49,8 @@ After soldering, an **automated optical inspection (AOI)** machine checks every 
 
 | | |
 |---|---|
-| **Input** | AOI alarm: measurements of each flagged solder joint (about 70 values), inspection type, component type, AOI error code |
-| **System** | Binary classification (supervised machine learning) trained on past manual-inspection results; classification threshold set so that at most 1 % of defective boards are classified as false calls |
+| **Input** | AOI alarm (one flagged board): measurements of each flagged solder joint (about 70 values), inspection type, component type, AOI error code |
+| **System** | Binary classification (supervised machine learning) trained on past manual-inspection results; classification threshold set for a recall of at least 99 % on true defects |
 | **Output** | Per board: is the AOI alarm real? **True defect** (→ manual inspection, repair) or **false call** (→ skip manual inspection) |
 | **Impact** | Less manual inspection work (cost, throughput) without lowering quality |
 
@@ -86,7 +86,7 @@ We follow **CRISP-DM** (Cross-Industry Standard Process for Data Mining; Chapman
 
 ## 6. First results
 
-**Baseline** ([`scripts/run_baseline.py`](scripts/run_baseline.py), [`results/baseline.json`](results/baseline.json)): each model is trained on the first 70 % of the records and tested on the rest (time order), compared with a random split. The number is the share of false calls correctly identified (manual inspections that could be skipped) while 99 % of defective boards are still caught.
+**Baseline** ([`scripts/run_baseline.py`](scripts/run_baseline.py), [`results/baseline.json`](results/baseline.json)): each model is trained on the first 70 % of the records and tested on the rest (time order), compared with a random split. The number is the **specificity** (share of false calls correctly classified as false call, i.e. manual inspections that could be skipped) at 99 % **recall** (99 % of defective boards still classified as true defect); positive class = true defect.
 
 | Model | Random 70/30 split (as often done in papers) | **Time order (as on the real line)** |
 |---|---|---|
@@ -100,7 +100,7 @@ These rates are read from the test period itself, so they are an upper bound.
 
 **Day-by-day simulation** ([`scripts/run_replay.py`](scripts/run_replay.py), [`results/replay.json`](results/replay.json)): second half of the records (39 production days, 17,366 flagged boards), thresholds set on past days only.
 
-| Model | Training | False calls correctly identified (manual inspections saved) | Defective boards missed |
+| Model | Training | Specificity: false calls correctly classified (manual inspections saved) | True defects missed (1 − recall) |
 |---|---|---|---|
 | Logistic regression | once | 15.0 % (2,523) | **3.38 %** (20 of 592) |
 | Logistic regression | every week | 11.6 % (1,949) | **2.20 %** (13 of 592) |
@@ -111,7 +111,7 @@ These rates are read from the test period itself, so they are an upper bound.
 
 ![Day-by-day simulation](docs/img/results.png)
 
-**What this shows:** all three models save manual inspections, but none keeps the 1 % limit on missed defects on later days, because the line changes over time. Handling these changes is the main challenge for the next milestones.
+**What this shows:** all three models save manual inspections (specificity 6.5–15.0 %), but none keeps 99 % recall on later days (96.3–97.8 %), because the line changes over time. Handling these changes is the main challenge for the next milestones.
 
 ## What we deliver
 
@@ -129,9 +129,8 @@ In a factory the classifier would run between the AOI machine and the manual ins
 
 | KPI | Baseline (time order) | Target (12 Jan) |
 |---|---|---|
-| Defective boards missed (classified as false call) | 2.2–3.7 % (day-by-day simulation) | **≤ 1 %** |
-| False calls correctly identified (manual inspections saved) | 6.4 % (best model, time order) | **≥ 20 %** |
-| Decision time per board | – | **< 1 s** on a normal laptop |
+| Recall (true defects classified as true defect) | 96.3–97.8 % (day-by-day simulation) | **≥ 99 %** |
+| Specificity (false calls classified as false call = manual inspections saved) | 6.4 % (best model at 99 % recall, time order) | **≥ 20 %** |
 
 Targets are fixed now, before the main experiments.
 

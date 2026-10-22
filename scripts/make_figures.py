@@ -61,7 +61,7 @@ def main():
     bars(ax, [NAMES[m] for m in models], [[base[m]["random_split"][k] for m in models],
                                          [base[m]["time_split"][k] for m in models]],
          [GREY, BLUE], ["Random split (as often in papers)", "Time order (as on the real line)"])
-    ax.set_ylabel("False calls correctly identified (%)\nwhile 99 % of defects are caught", fontsize=9)
+    ax.set_ylabel("Specificity (%) at 99 % recall\n(false calls correctly classified)", fontsize=9)
     ax.legend(frameon=False, fontsize=8)
     ax.set_title("Baseline: the same models look much better with a random split", fontsize=10)
     fig.tight_layout()
@@ -71,14 +71,14 @@ def main():
     pol = [("train_once", "Train once", GREY), ("retrain_weekly", "Retrain every week", BLUE)]
     bars(axs[0], [NAMES[m] for m in models], [[rep[m][p]["false_calls_released_pct"] for m in models] for p, _, _ in pol],
          [c for _, _, c in pol], [l for _, l, _ in pol])
-    axs[0].set_title("False calls correctly identified\n(manual inspections saved, higher is better)", fontsize=10)
+    axs[0].set_title("Specificity: false calls correctly classified\n(manual inspections saved, higher is better)", fontsize=10)
     axs[0].set_ylabel("%")
     axs[0].legend(frameon=False, fontsize=8)
     bars(axs[1], [NAMES[m] for m in models], [[rep[m][p]["defects_released_pct"] for m in models] for p, _, _ in pol],
          [c for _, _, c in pol], [l for _, l, _ in pol], fmt="{:.2f} %")
     axs[1].axhline(1, color=RED, ls="--", lw=1)
-    axs[1].text(-0.45, 1.06, "target ≤ 1 %", color=RED, fontsize=8, ha="left", va="bottom")
-    axs[1].set_title("Defective boards missed\n(lower is better)", fontsize=10)
+    axs[1].text(-0.45, 1.06, "requirement ≤ 1 % (recall ≥ 99 %)", color=RED, fontsize=8, ha="left", va="bottom")
+    axs[1].set_title("True defects missed (1 − recall)\n(lower is better)", fontsize=10)
     axs[1].set_ylabel("%")
     fig.suptitle(f"Day-by-day simulation of the line: {rep['logistic_regression']['train_once']['days']} production days, "
                  f"{rep['logistic_regression']['train_once']['boards']:,} flagged boards", fontsize=10)
