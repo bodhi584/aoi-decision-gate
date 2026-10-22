@@ -136,6 +136,10 @@ Targets are fixed now, before the main experiments.
 - Data licence is non-commercial (course use only); no personal data.
 - Main risk: drift limits the release rate. Fallback: report which drift handling works, which does not, and why.
 
+## Future work
+
+The next step after the course is a real line with an industry partner: (1) an electronics plant shares AOI and manual-inspection records under a data agreement; (2) an interface reads each board's AOI result from the machine or MES (for example via the IPC-CFX standard or a vendor export) and sends the gate's decision to the repair station; (3) **shadow mode**: the gate runs next to the operators and only logs its decisions; (4) the plant's quality engineers compare the logs and approve go-live, starting with one inspection type.
+
 ## 9. Timeline
 
 ![Timeline](docs/img/gantt.png)
