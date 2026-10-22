@@ -1,6 +1,6 @@
-# Second Check of AOI Results with Supervised Machine Learning
+# Binary Classification of AOI Alarms into True Defects and False Calls
 
-**Binary classification of AOI alarms into true defects and false calls (Siemens production data)**
+**Second check of AOI results with supervised machine learning (Siemens production data)**
 
 [![CI](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/bodhi584/aoi-decision-gate/actions/workflows/ci.yml)
 
