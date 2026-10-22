@@ -1,0 +1,33 @@
+{
+  "start_day": 85,
+  "static": {
+    "days": 39,
+    "boards": 17366,
+    "false_call_boards": 16774,
+    "defective_boards": 592,
+    "false_calls_released_pct": 16.4,
+    "defects_released": 23,
+    "defects_released_pct": 3.89,
+    "manual_inspections_saved": 2750
+  },
+  "weekly_all_past": {
+    "days": 39,
+    "boards": 17366,
+    "false_call_boards": 16774,
+    "defective_boards": 592,
+    "false_calls_released_pct": 14.4,
+    "defects_released": 27,
+    "defects_released_pct": 4.56,
+    "manual_inspections_saved": 2418
+  },
+  "weekly_last_28_days": {
+    "days": 39,
+    "boards": 17366,
+    "false_call_boards": 16774,
+    "defective_boards": 592,
+    "false_calls_released_pct": 3.2,
+    "defects_released": 14,
+    "defects_released_pct": 2.36,
+    "manual_inspections_saved": 542
+  }
+}

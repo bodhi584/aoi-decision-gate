@@ -1,0 +1,18 @@
+{
+  "time_split": {
+    "joint_auroc": 0.889,
+    "test_boards": 10466,
+    "test_defective_boards": 520,
+    "released_false_calls_pct_at_100pct_caught": 1.8,
+    "released_false_calls_pct_at_99pct_caught": 8.2,
+    "released_false_calls_pct_at_95pct_caught": 19.2
+  },
+  "random_split": {
+    "joint_auroc": 0.966,
+    "test_boards": 11923,
+    "test_defective_boards": 265,
+    "released_false_calls_pct_at_100pct_caught": 23.6,
+    "released_false_calls_pct_at_99pct_caught": 29.0,
+    "released_false_calls_pct_at_95pct_caught": 62.2
+  }
+}
