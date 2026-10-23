@@ -23,7 +23,7 @@ def load(path: str | Path) -> pd.DataFrame:
 
 
 def feature_columns(df: pd.DataFrame) -> list[str]:
-    """Categorical columns first, then the inspection measurements."""
+    """Input columns: the categorical fields first, then the AOI measurements (inspection_feat1, 2, ...)."""
     return CATEGORICAL + [c for c in df.columns if c.startswith("inspection_feat")]
 
 
