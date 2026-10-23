@@ -1,10 +1,10 @@
-"""Day-by-day simulation of the production line: compare the three models and two update policies.
+"""Day-by-day simulation of the line: three models, two update policies.
 
 Models: logistic regression (baseline), random forest, neural network. Policies: train once, or retrain every week
-on all past days.
-The replay starts after the first half of the records. Every threshold is set on past days only
-(at most 1 % of defective boards released on the calibration days).
-Usage: python scripts/run_replay.py [data/dataset.csv]
+on all past days. The simulation starts after the first half of the recorded days; every threshold is set on past
+days only (recall 99 % on the calibration days).
+Writes results/simulation.json (KPIs) and results/simulation_<model>_<policy>.csv (one row per day).
+Usage: python scripts/run_simulation.py [data/dataset.csv]   (about 10 minutes)
 """
 import json
 import sys
@@ -12,7 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from aoi_classification.data import load  # noqa: E402
-from aoi_classification.replay import replay, summary  # noqa: E402
+from aoi_classification.simulation import simulate, summary  # noqa: E402
 
 from aoi_classification.model import MODELS  # noqa: E402
 
@@ -30,11 +30,11 @@ def main(path="data/dataset.csv"):
     for model in MODELS:
         res[model] = {}
         for name, kw in POLICIES.items():
-            r = replay(df, start, model=model, **kw)
-            r.to_csv(f"results/replay_{model}_{name}.csv", index=False)
+            r = simulate(df, start, model=model, **kw)
+            r.to_csv(f"results/simulation_{model}_{name}.csv", index=False)
             res[model][name] = summary(r)
             print(model, name, res[model][name], flush=True)
-    Path("results/replay.json").write_text(json.dumps(res, indent=2))
+    Path("results/simulation.json").write_text(json.dumps(res, indent=2))
 
 
 if __name__ == "__main__":

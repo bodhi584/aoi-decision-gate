@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from aoi_classification import FalseCallClassifier, replay, summary, threshold_for
+from aoi_classification import FalseCallClassifier, simulate, summary, threshold_for
 from aoi_classification.data import CATEGORICAL, boards
 
 
@@ -49,9 +49,9 @@ def test_classifier_finds_some_false_calls_and_keeps_defects():
     assert b.predicted_false_call[b.defective == 1].mean() < 0.2
 
 
-def test_replay_uses_only_past_days():
+def test_simulation_uses_only_past_days():
     df = synthetic()
-    r = replay(df, start_day=25, retrain_every=5, calib_days=7)
+    r = simulate(df, start_day=25, retrain_every=5, calib_days=7)
     assert (r.trained_on_day <= r.day).all()
     assert r.day.min() == 25
     s = summary(r)
@@ -76,3 +76,13 @@ def test_each_model_trains_and_decides(model):
     b = FalseCallClassifier(model=model, max_miss=0.0, calib_days=7).fit(df[df.day < 30]).classify(df[df.day >= 30])
     assert set(b.columns) >= {"score", "defective", "predicted_false_call"}
     assert b.predicted_false_call[b.defective == 0].mean() > 0.1
+
+
+def test_summary_kpis():
+    r = pd.DataFrame({"day": [1, 2], "boards": [10, 10], "false_call_boards": [9, 8], "defective_boards": [1, 2],
+                      "false_calls_identified": [3, 2], "missed_defects": [0, 1], "threshold": [0.1, 0.1],
+                      "trained_on_day": [0, 0]})
+    s = summary(r)
+    assert s["recall_pct"] == round(100 * 2 / 3, 2)      # 3 true defects, 1 missed
+    assert s["specificity_pct"] == round(100 * 5 / 17, 1)  # 17 false calls, 5 identified
+    assert s["manual_inspections_saved"] == 5

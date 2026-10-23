@@ -61,11 +61,11 @@ def board_scores(df: pd.DataFrame, joint_scores: np.ndarray) -> pd.DataFrame:
 
 
 def threshold_for(scores: np.ndarray, defective: np.ndarray, max_miss: float) -> float:
-    """Largest threshold that releases at most `max_miss` of the defective boards (release if score < threshold)."""
+    """Largest threshold that classifies at most `max_miss` of the true defects as false call (false call if score < threshold)."""
     d = np.sort(scores[defective == 1])
     if len(d) == 0:
         return 0.0
-    k = int(np.floor(max_miss * len(d)))  # number of defective boards we may release
+    k = int(np.floor(max_miss * len(d)))  # number of true defects that may be missed
     return float(d[k])
 
 

@@ -3,7 +3,7 @@
 Train on the first 70 % of the records (time order) and test on the rest, versus a random 70/30 split of boards.
 Reports joint-level AUROC and, on the test boards, the share of false-call boards that could be released
 while still sending 100 / 99 / 95 % of the defective boards to manual inspection. These operating points are read
-from the test set itself, so they are an upper bound; the replay simulation (run_replay.py) sets thresholds on past data only.
+from the test set itself, so they are an upper bound; the day-by-day simulation (run_simulation.py) sets thresholds on past data only.
 Usage: python scripts/run_baseline.py [data/dataset.csv]
 """
 import json
