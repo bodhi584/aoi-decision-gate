@@ -151,7 +151,7 @@ The next step after the course is a real line with an industry partner: (1) an e
 
 ![Timeline](docs/img/gantt.png)
 
-Milestones follow the course requirements for the Software & Simulation track; details in [`PROGRESS.md`](PROGRESS.md). Tasks are tracked as [issues](../../issues).
+Milestones follow the course requirements for the Software & Simulation track; details in [`PROGRESS.md`](PROGRESS.md). Tasks and owners are tracked as [issues](../../issues); how to work on them: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## 10. Run it
 
