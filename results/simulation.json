@@ -6,9 +6,9 @@
       "boards": 17366,
       "false_call_boards": 16774,
       "defective_boards": 592,
-      "false_calls_released_pct": 15.0,
-      "defects_released": 20,
-      "defects_released_pct": 3.38,
+      "recall_pct": 96.62,
+      "specificity_pct": 15.0,
+      "missed_defects": 20,
       "manual_inspections_saved": 2523
     },
     "retrain_weekly": {
@@ -16,9 +16,9 @@
       "boards": 17366,
       "false_call_boards": 16774,
       "defective_boards": 592,
-      "false_calls_released_pct": 11.6,
-      "defects_released": 13,
-      "defects_released_pct": 2.2,
+      "recall_pct": 97.8,
+      "specificity_pct": 11.6,
+      "missed_defects": 13,
       "manual_inspections_saved": 1949
     }
   },
@@ -28,9 +28,9 @@
       "boards": 17366,
       "false_call_boards": 16774,
       "defective_boards": 592,
-      "false_calls_released_pct": 9.9,
-      "defects_released": 13,
-      "defects_released_pct": 2.2,
+      "recall_pct": 97.8,
+      "specificity_pct": 9.9,
+      "missed_defects": 13,
       "manual_inspections_saved": 1658
     },
     "retrain_weekly": {
@@ -38,9 +38,9 @@
       "boards": 17366,
       "false_call_boards": 16774,
       "defective_boards": 592,
-      "false_calls_released_pct": 13.1,
-      "defects_released": 21,
-      "defects_released_pct": 3.55,
+      "recall_pct": 96.45,
+      "specificity_pct": 13.1,
+      "missed_defects": 21,
       "manual_inspections_saved": 2203
     }
   },
@@ -50,9 +50,9 @@
       "boards": 17366,
       "false_call_boards": 16774,
       "defective_boards": 592,
-      "false_calls_released_pct": 11.9,
-      "defects_released": 19,
-      "defects_released_pct": 3.21,
+      "recall_pct": 96.79,
+      "specificity_pct": 11.9,
+      "missed_defects": 19,
       "manual_inspections_saved": 1996
     },
     "retrain_weekly": {
@@ -60,9 +60,9 @@
       "boards": 17366,
       "false_call_boards": 16774,
       "defective_boards": 592,
-      "false_calls_released_pct": 6.5,
-      "defects_released": 22,
-      "defects_released_pct": 3.72,
+      "recall_pct": 96.28,
+      "specificity_pct": 6.5,
+      "missed_defects": 22,
       "manual_inspections_saved": 1098
     }
   }
