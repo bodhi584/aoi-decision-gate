@@ -69,7 +69,7 @@ We follow **CRISP-DM** (Cross-Industry Standard Process for Data Mining; Chapman
 | Evaluation | **Day-by-day simulation** of the line (section 6): precision, recall, defective boards released, manual inspections saved |
 | Deployment | Demo video and run instructions (P5) |
 
-**Day-by-day simulation.** The recorded days are played back in time order. On each day every flagged board is classified by a model trained only on earlier days, exactly as on the real line. We compare training once with retraining every week. Code: [`aoi_classification/replay.py`](aoi_classification/replay.py); step by step: [`model_training.ipynb`](model_training.ipynb).
+**Day-by-day simulation.** The recorded days are played back in time order. On each day every flagged board is classified by a model trained only on earlier days, exactly as on the real line. We compare training once with retraining every week. Code: [`aoi_classification/simulation.py`](aoi_classification/simulation.py); step by step: [`model_training.ipynb`](model_training.ipynb).
 
 > **Why a day-by-day simulation instead of a random train/test split?** A random split mixes future and past. It looks much better than reality on this data (section 6), so it would overstate what a factory gets.
 
@@ -98,7 +98,7 @@ These rates are read from the test period itself, so they are an upper bound.
 
 ![Baseline](docs/img/baseline.png)
 
-**Day-by-day simulation** ([`scripts/run_replay.py`](scripts/run_replay.py), [`results/replay.json`](results/replay.json)): second half of the records (39 production days, 17,366 flagged boards), thresholds set on past days only.
+**Day-by-day simulation** ([`scripts/run_simulation.py`](scripts/run_simulation.py), [`results/simulation.json`](results/simulation.json)): second half of the records (39 production days, 17,366 flagged boards), thresholds set on past days only.
 
 | Model | Training | Specificity: false calls correctly classified (manual inspections saved) | True defects missed (1 − recall) |
 |---|---|---|---|
@@ -164,18 +164,21 @@ pip install -r requirements.txt pytest
 python -m pytest -q                  # unit tests (synthetic data)
 python scripts/download_data.py      # Siemens data, about 330 MB
 python scripts/run_baseline.py       # results/baseline.json
-python scripts/run_replay.py         # results/replay*.json / .csv (about 10 min)
+python scripts/data_facts.py         # results/data_facts.json (size, false-call share, drift)
+python scripts/run_simulation.py     # results/simulation*.json / .csv (about 10 min)
 python scripts/make_figures.py       # docs/img/*.png
+jupyter notebook model_training.ipynb  # the same steps, one by one
 ```
 
 ## 11. Repository
 
 ```
 aoi_classification/   data loading, binary classifier (model + threshold), day-by-day simulation
-scripts/    data download, baseline, simulation, figures
-tests/      unit tests (run automatically on every push)
-results/    result files of every run shown on this page
-docs/       proposal, figures
+scripts/              data download, data facts, baseline, simulation, figures
+model_training.ipynb  step-by-step notebook (load, train, threshold, evaluate, simulate)
+tests/                unit tests (run automatically on every push)
+results/              result files of every run shown on this page
+docs/                 proposal, slides, figures
 ```
 
 ## References

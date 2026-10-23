@@ -1,4 +1,4 @@
-day,boards,false_call_boards,defective_boards,released_false_calls,released_defects,threshold,trained_on_day
+day,boards,false_call_boards,defective_boards,false_calls_identified,missed_defects,threshold,trained_on_day
 85,218,216,2,62,0,0.01381126805137324,85
 87,612,606,6,150,0,0.01381126805137324,85
 88,493,486,7,37,0,0.01381126805137324,85

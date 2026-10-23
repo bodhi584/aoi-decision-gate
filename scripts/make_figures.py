@@ -1,6 +1,6 @@
 """Figures for the README and slides, made from the result files only.
 
-Usage: python scripts/make_figures.py   (after run_baseline.py and run_replay.py)
+Usage: python scripts/make_figures.py   (after run_baseline.py and run_simulation.py)
 """
 import json
 from pathlib import Path
@@ -52,7 +52,7 @@ def system_figure():
 def main():
     system_figure()
     base = json.loads(Path("results/baseline.json").read_text())
-    rep = json.loads(Path("results/replay.json").read_text())
+    rep = json.loads(Path("results/simulation.json").read_text())
     models = list(NAMES)
     Path("docs/img").mkdir(parents=True, exist_ok=True)
 
@@ -69,12 +69,12 @@ def main():
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 3.8))
     pol = [("train_once", "Train once", GREY), ("retrain_weekly", "Retrain every week", BLUE)]
-    bars(axs[0], [NAMES[m] for m in models], [[rep[m][p]["false_calls_released_pct"] for m in models] for p, _, _ in pol],
+    bars(axs[0], [NAMES[m] for m in models], [[rep[m][p]["specificity_pct"] for m in models] for p, _, _ in pol],
          [c for _, _, c in pol], [l for _, l, _ in pol])
     axs[0].set_title("Specificity: false calls correctly classified\n(manual inspections saved, higher is better)", fontsize=10)
     axs[0].set_ylabel("%")
     axs[0].legend(frameon=False, fontsize=8)
-    bars(axs[1], [NAMES[m] for m in models], [[rep[m][p]["defects_released_pct"] for m in models] for p, _, _ in pol],
+    bars(axs[1], [NAMES[m] for m in models], [[round(100 - rep[m][p]["recall_pct"], 2) for m in models] for p, _, _ in pol],
          [c for _, _, c in pol], [l for _, l, _ in pol], fmt="{:.2f} %")
     axs[1].axhline(1, color=RED, ls="--", lw=1)
     axs[1].text(-0.45, 1.06, "requirement ≤ 1 % (recall ≥ 99 %)", color=RED, fontsize=8, ha="left", va="bottom")
