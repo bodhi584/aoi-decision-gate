@@ -173,7 +173,7 @@ jupyter notebook model_training.ipynb  # the same steps, one by one
 ## 11. Repository
 
 ```
-aoi_classification/   data loading, binary classifier (model + threshold), day-by-day simulation
+aoi_classification/   data loading, binary classifier (model + threshold), day-by-day simulation — explained step by step in docs/code_walkthrough.md
 scripts/              data download, data facts, baseline, simulation, figures
 model_training.ipynb  step-by-step notebook (load, train, threshold, evaluate, simulate)
 tests/                unit tests (run automatically on every push)

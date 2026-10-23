@@ -36,5 +36,6 @@ No Git? Use **Add file → Upload files** on GitHub, choose *Create a new branch
 
 - English only, short sentences, the terms from the README (binary classification, true defect, false call, recall, specificity).
 - Every number comes from a result file in `results/` or a cited source.
+- **Keep code simple.** Plain functions, short files, one comment per step, standard scikit-learn and pandas calls only. Every team member must be able to explain every line to the lecturer. How the existing code works: [`docs/code_walkthrough.md`](docs/code_walkthrough.md).
 - Tools from the lecture (p. 22): Python, pandas, scikit-learn, matplotlib, Jupyter.
 - Questions: comment on the issue.
